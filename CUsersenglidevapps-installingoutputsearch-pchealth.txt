@@ -1,3 +1,0 @@
-   -                                                                                                                         Name                    Id                             Version
----------------------------------------------------------------------
-Windows PC Health Check Microsoft.WindowsPCHealthCheck 4.0.2410.23001
