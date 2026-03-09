@@ -1,0 +1,3 @@
+# Ignore generated output contents, but keep the output directory
+output/*
+!output/.gitkeep
