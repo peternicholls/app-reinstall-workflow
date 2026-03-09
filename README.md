@@ -1,4 +1,4 @@
-# App Inventory Workflow
+# App Reinstall Workflow
 
 This workspace now treats `installed-programs.csv` as a source snapshot and keeps the working inventory in `catalog/apps.json`.
 
