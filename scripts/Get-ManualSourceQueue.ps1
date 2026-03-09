@@ -36,9 +36,9 @@ function Get-ManualAcquisitionRecommendation {
     if ($name.Contains('adobe svg viewer')) {
         return [PSCustomObject]@{
             acquisitionType = 'legacy-archive'
-            sourceHint = 'Internal software archive or archived vendor media'
-            reason = 'Legacy browser plugin with no current package source'
-            referenceUrl = $null
+            sourceHint = 'No current Adobe download; use retained media or internal archive only'
+            reason = 'Adobe SVG Viewer is discontinued and Adobe no longer provides a current download'
+            referenceUrl = 'https://community.adobe.com/t5/download-install-discussions/download-adobe-svg-viewer-3/m-p/4573449'
         }
     }
 
@@ -117,18 +117,18 @@ function Get-ManualAcquisitionRecommendation {
     if ($name.Contains('ptstroubleshooter') -or $publisher.Contains('ford')) {
         return [PSCustomObject]@{
             acquisitionType = 'vendor-portal'
-            sourceHint = 'Ford service or dealer tooling portal'
+            sourceHint = 'Ford Tech Service dealer download portal'
             reason = 'Specialized vendor support tool outside normal public package feeds'
-            referenceUrl = $null
+            referenceUrl = 'https://www.fordtechservice.dealerconnection.com/Rotunda/MCSIDSDownloadSoftware'
         }
     }
 
     if ($name.Contains('obdwiz')) {
         return [PSCustomObject]@{
             acquisitionType = 'vendor-site'
-            sourceHint = 'OCTech or ScanTool vendor downloads'
+            sourceHint = 'Official OBDLink or ScanTool downloads'
             reason = 'Vendor-specific automotive application with no package feed match'
-            referenceUrl = $null
+            referenceUrl = 'https://www.obdlink.com/software/'
         }
     }
 

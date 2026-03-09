@@ -1,3 +1,7 @@
 # Ignore generated output contents, but keep the output directory
 output/*
 !output/.gitkeep
+
+# Ignore the working app catalog, but keep the catalog directory
+catalog/apps.json
+!catalog/.gitkeep

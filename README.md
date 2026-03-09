@@ -1,82 +1,196 @@
-# App Reinstall Workflow
+# Windows App Reinstall Catalog
 
-This workspace now treats `installed-programs.csv` as a source snapshot and keeps the working inventory in `catalog/apps.json`.
+This repository contains a PowerShell workflow for capturing a Windows software inventory, converting it into a structured catalog, enriching that catalog with installer metadata, and preparing a reinstall plan.
 
-The JSON catalog is easier to maintain because each app can carry status, installer metadata, aliases, and staging information in one place.
+It is intended for scenarios such as:
 
-## Scripts
+- rebuilding a workstation after a clean install
+- documenting the applications on a machine before migration or replacement
+- tracking which apps can be restored automatically and which still require manual download steps
 
-Run these from the workspace root with `pwsh.exe` on Windows.
+The workflow centers on `catalog/apps.json`, a machine-readable catalog that keeps installation state, package candidates, local installer matches, classification data, and manual follow-up notes in one place.
 
-`pwsh.exe -File .\scripts\Initialize-AppCatalog.ps1`
+## What The Repository Does
 
-Creates `catalog/apps.json` from `installed-programs.csv`.
+The scripts in this repository help you:
 
-`pwsh.exe -File .\scripts\Sync-AppCatalog.ps1 -View Summary`
+- export the currently installed Windows programs to CSV
+- initialize a JSON catalog from that snapshot
+- re-scan the machine and mark apps as installed, missing, or ignored
+- classify entries so runtimes and system components can be separated from user applications
+- look up likely `winget` package IDs and latest available versions
+- discover matching installer files in local folders
+- stage installers into a single working directory
+- generate a manual-source queue for apps that cannot be resolved automatically
+- optionally fetch installers from curated manual reference URLs when direct downloads are available
+- build an install plan and optionally execute it
 
-Checks the machine registry and marks apps in the catalog as `installed`, `missing`, or `ignored`.
+## Requirements
 
-`pwsh.exe -File .\scripts\Sync-AppCatalog.ps1 -View Missing`
+- Windows
+- PowerShell 7 or Windows PowerShell with script execution enabled for local scripts
+- `winget` for package lookup, version refresh, and optional download/install flows
 
-Shows only the apps that are currently missing.
+Run commands from the repository root:
 
-`pwsh.exe -File .\scripts\Set-AppStatus.ps1 -Name "Google Chrome" -Status missing -Exact`
+```powershell
+pwsh -File .\scripts\Sync-AppCatalog.ps1 -View Summary
+```
 
-Manually overrides one catalog entry.
+## Repository Layout
 
-`pwsh.exe -File .\scripts\Find-AppInstallers.ps1 -SearchRoot C:\Users\engli\Downloads,C:\Installers -ReportPath .\output\installer-report.json`
+| Path | Purpose |
+| --- | --- |
+| `scripts/` | Entry-point scripts for inventory, catalog maintenance, staging, and installation |
+| `scripts/lib/AppCatalog.psm1` | Shared helper functions used by all scripts |
+| `catalog/apps.json` | Primary working catalog |
+| `installed-programs.csv` | Source inventory snapshot |
+| `output/` | Generated reports, queues, logs, and staged installers |
 
-Searches for installer files and records the best local matches in the catalog.
+`output/` is ignored by Git except for a placeholder, so generated reports and staged installers do not need to be committed.
 
-`pwsh.exe -File .\scripts\Resolve-WingetPackages.ps1 -MaxApps 20`
+## Quick Start
 
-Searches winget for likely package IDs and stores the best candidates in the catalog.
+### 1. Export the current software inventory
 
-`pwsh.exe -File .\scripts\Update-LatestAppVersions.ps1 -MaxApps 20`
+```powershell
+pwsh -File .\scripts\Get-InstalledPrograms.ps1 -Format Csv -OutputPath .\installed-programs.csv
+```
 
-Refreshes `latest.version` for apps that already have a `wingetId`, so the catalog keeps a current available version separate from the CSV snapshot version.
+### 2. Build the catalog
 
-`pwsh.exe -File .\scripts\Classify-AppCatalog.ps1 -ApplyIgnoreRecommendations`
+```powershell
+pwsh -File .\scripts\Initialize-AppCatalog.ps1
+```
 
-Classifies apps into application, runtime, sdk, system-component, driver, browser, or developer-tool buckets and can auto-ignore obvious non-reinstall targets.
+This creates `catalog/apps.json` from the CSV snapshot.
 
-`pwsh.exe -File .\scripts\Prepare-AppInstallers.ps1 -DownloadWithWinget`
+### 3. Sync the catalog against the current machine
 
-Stages local installers into `output/staged-installers` and optionally downloads installers via `winget` for apps where `installer.wingetId` is set.
+```powershell
+pwsh -File .\scripts\Sync-AppCatalog.ps1 -View Summary
+pwsh -File .\scripts\Sync-AppCatalog.ps1 -View Missing
+```
 
-`pwsh.exe -File .\scripts\Install-PreparedApps.ps1 -Mode Plan`
+### 4. Classify entries
 
-Builds an install plan from the staged queue. Use `-Mode Execute` to actually run ready installers.
+```powershell
+pwsh -File .\scripts\Classify-AppCatalog.ps1 -ApplyIgnoreRecommendations
+```
 
-`pwsh.exe -File .\scripts\Get-ManualSourceQueue.ps1 -Format Table`
+This helps remove obvious runtimes, SDK fragments, and system-managed components from the reinstall target list.
 
-Builds a manual-acquisition queue for missing apps that have neither a safe `wingetId` nor a local installer candidate, with source hints for vendor portals, Microsoft components, OEM drivers, or legacy archives.
+### 5. Resolve package IDs and latest versions
 
-`pwsh.exe -File .\scripts\Get-ManualSourceQueue.ps1 -Format Table -UpdateCatalog`
+```powershell
+pwsh -File .\scripts\Resolve-WingetPackages.ps1 -MaxApps 20
+pwsh -File .\scripts\Update-LatestAppVersions.ps1 -MaxApps 20
+```
 
-Builds the same manual-acquisition queue and also writes the current manual-source recommendation back into `catalog/apps.json` under `installer.manualAcquisitionType`, `installer.manualSourceHint`, `installer.manualReferenceUrl`, `installer.manualReason`, and `installer.manualUpdatedAt`.
+### 6. Search local folders for installers
 
-## Catalog Shape
+```powershell
+pwsh -File .\scripts\Find-AppInstallers.ps1 -SearchRoot C:\Installers,$env:USERPROFILE\Downloads
+```
 
-Each app entry includes:
+### 7. Stage installers into a working folder
+
+```powershell
+pwsh -File .\scripts\Prepare-AppInstallers.ps1 -DownloadWithWinget
+```
+
+### 8. Review apps that still need manual acquisition
+
+```powershell
+pwsh -File .\scripts\Get-ManualSourceQueue.ps1 -Format Table -UpdateCatalog
+```
+
+### 9. Optionally fetch installers from manual reference URLs
+
+```powershell
+pwsh -File .\scripts\Download-ManualReferenceInstallers.ps1 -MaxApps 5
+```
+
+### 10. Build an install plan
+
+```powershell
+pwsh -File .\scripts\Install-PreparedApps.ps1 -Mode Plan
+```
+
+Review the generated plan before any execution step.
+
+### 11. Execute when ready
+
+```powershell
+pwsh -File .\scripts\Install-PreparedApps.ps1 -Mode Execute
+```
+
+## Script Reference
+
+| Script | Purpose |
+| --- | --- |
+| `Get-InstalledPrograms.ps1` | Reads installed-program data from the local machine and outputs table, JSON, or CSV |
+| `Initialize-AppCatalog.ps1` | Creates `catalog/apps.json` from `installed-programs.csv` |
+| `Sync-AppCatalog.ps1` | Re-checks the machine and updates each app status |
+| `Classify-AppCatalog.ps1` | Assigns buckets such as application, runtime, sdk, driver, browser, or developer-tool |
+| `Resolve-WingetPackages.ps1` | Finds likely `winget` package candidates and stores the best match |
+| `Update-LatestAppVersions.ps1` | Refreshes `latest.version` for apps that already have a `wingetId` |
+| `Find-AppInstallers.ps1` | Searches local folders for likely installer files |
+| `Prepare-AppInstallers.ps1` | Copies or downloads installers into `output/staged-installers` and writes `output/install-queue.json` |
+| `Get-ManualSourceQueue.ps1` | Produces a queue of unresolved apps that still need vendor, Microsoft, OEM, or archive lookup |
+| `Download-ManualReferenceInstallers.ps1` | Attempts to download installers from `installer.manualReferenceUrl` and stage them for later execution |
+| `Set-AppStatus.ps1` | Manually overrides one catalog entry |
+| `Install-PreparedApps.ps1` | Generates an install plan and can run supported installers |
+
+## Catalog Model
+
+Each app entry in `catalog/apps.json` includes fields such as:
 
 - `name`, `publisher`, `expectedVersion`
-- `latest.version`, `latest.source`, `latest.checkedAt`, `latest.packageId`
 - `desired` and `status`
-- `classification.bucket`, `classification.recommendedAction`, `classification.reason`
-- `detection.matchNames` for alternate display names
-- `installer.localPath`, `installer.localCandidates`, `installer.wingetCandidates`, `installer.wingetId`, `installer.downloadedPath`, `installer.installArgs`, `installer.ready`
-- `installer.manualAcquisitionType`, `installer.manualSourceHint`, `installer.manualReferenceUrl`, `installer.manualReason`, `installer.manualUpdatedAt` for unresolved apps that need vendor or Microsoft download pages
+- `detection.*` for last-seen metadata and match names
+- `classification.*` for bucket, recommendation, and rationale
+- `latest.*` for current package version information
+- `installer.*` for local candidates, selected installer path, `winget` metadata, manual-source hints, staging path, and readiness
+- `notes` for any manual annotations
 
-## Suggested Workflow
+This structure is designed to keep all reinstall-related decisions close to the application record they affect.
 
-1. Initialize the catalog once from the CSV.
-2. Run the sync script whenever you want a fresh installed vs missing report.
-3. Run the classification script to separate real apps from runtimes, SDK fragments, and system components.
-4. Run the winget resolver to fill in likely package IDs for missing apps.
-5. Run the latest-version refresh script so current available versions are tracked independently from `expectedVersion`.
-6. Add alternate display names or adjust `installer.wingetId` values in `catalog/apps.json` where matching needs manual cleanup.
-7. Run installer discovery against your downloads or software archive folders.
-8. Run the prepare script to copy or download installers into a staging folder.
-9. Run the manual-source queue script for the apps that still have no package source or local installer.
-10. Run the install planner, then execute only when the commands look correct.
+## Reports And Generated Files
+
+The scripts can generate artifacts such as:
+
+- `output/winget-report.json`
+- `output/classification-report.json`
+- `output/manual-source-queue.json`
+- `output/manual-download-queue.json`
+- `output/install-queue.json`
+- `output/install-log.json`
+- `output/staged-installers/`
+
+These files are intended as working data, not long-term source files.
+
+## Safety Notes
+
+- Prefer `Install-PreparedApps.ps1 -Mode Plan` before any execution.
+- EXE installers may require explicit silent arguments in `installer.installArgs` before they are safe to run unattended.
+- Review `winget` matches and local installer candidates before trusting them as final.
+- Device drivers, OEM utilities, and licensed software often need vendor-specific handling even when they appear in the catalog.
+
+## Privacy And Publishing Notes
+
+This workflow operates on machine-derived data. Files such as `installed-programs.csv`, `catalog/apps.json`, generated reports, and staged installer paths can reveal:
+
+- installed software inventory
+- usernames and local file paths
+- internal tooling names
+- vendor portals or licensed software usage
+
+If you use this repository publicly, treat those files as environment-specific data and sanitize or exclude them before publishing.
+
+## Limitations
+
+- The repository is Windows-focused.
+- `winget` matching is heuristic and may need manual correction.
+- Automatic execution currently covers `msi` packages, `winget install`, and `exe` installers when silent arguments are known.
+- Some applications will always remain manual because they are licensed, OEM-specific, legacy, or not available from a trusted package source.
