@@ -26,7 +26,7 @@ if ([string]::IsNullOrWhiteSpace($CatalogPath)) {
 }
 
 if ([string]::IsNullOrWhiteSpace($StageDirectory)) {
-    $StageDirectory = Join-Path -Path $projectRoot -ChildPath 'output\staged-installers'
+    $StageDirectory = Join-Path -Path $projectRoot -ChildPath 'staged-installers'
 }
 
 if ([string]::IsNullOrWhiteSpace($QueuePath)) {

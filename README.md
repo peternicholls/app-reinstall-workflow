@@ -147,7 +147,7 @@ pwsh -File .\scripts\Install-PreparedApps.ps1 -Mode Execute
 | `Resolve-WingetPackages.ps1` | Finds likely `winget` package candidates and stores the best match |
 | `Update-LatestAppVersions.ps1` | Refreshes `latest.version` for apps that already have a `wingetId` |
 | `Find-AppInstallers.ps1` | Searches local folders for likely installer files |
-| `Prepare-AppInstallers.ps1` | Copies or downloads installers from local paths and `winget` into `output/staged-installers` and writes `output/install-queue.json` |
+| `Prepare-AppInstallers.ps1` | Copies or downloads installers from local paths and `winget` into `staged-installers/` and writes `output/install-queue.json` |
 | `Get-ManualSourceQueue.ps1` | Produces a queue of unresolved apps that still need vendor, Microsoft, OEM, or archive lookup |
 | `Set-AppStatus.ps1` | Manually overrides one catalog entry |
 | `Install-PreparedApps.ps1` | Generates an install plan and can run supported installers |
@@ -177,7 +177,7 @@ The scripts can generate artifacts such as:
 - `output/manual-source-queue.json`
 - `output/install-queue.json`
 - `output/install-log.json`
-- `output/staged-installers/`
+- `staged-installers/`
 
 These files are intended as working data, not long-term source files.
 
