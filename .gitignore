@@ -2,6 +2,10 @@
 output/*
 !output/.gitkeep
 
+# Ignore staged installers, but keep the staging directory
+staged-installers/*
+!staged-installers/.gitkeep
+
 # Ignore the working app catalog, but keep the catalog directory
 catalog/apps.json
 !catalog/.gitkeep
