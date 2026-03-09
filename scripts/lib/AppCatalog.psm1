@@ -93,6 +93,9 @@ function Get-AppClassification {
         'redistributable',
         'minimum runtime',
         'additional runtime',
+        'net host',
+        'net runtime',
+        'host fx resolver',
         'dotnet host',
         'dotnet runtime',
         'dotnet host fx resolver',
@@ -108,18 +111,22 @@ function Get-AppClassification {
         'software development kit',
         'universal crt',
         'winrt intellisense',
+        'net native sdk',
         'extension sdk',
         'sdk arm',
         'sdk addon',
         'app certification kit',
+        'application compatibility database',
         'kits configuration installer',
         'winappdeploy',
         'msi development tools',
+        'setup wmi provider',
         'supportedapilist',
         'coreeditorfonts'
     )
 
     $systemPatterns = @(
+        'msxml',
         'update health tools',
         'windows subsystem for linux update',
         'click to run licensing component',
@@ -155,6 +162,16 @@ function Get-AppClassification {
     elseif (@($driverPatterns | Where-Object { $normalizedName.Contains($_) }).Count -gt 0) {
         $result.bucket = 'driver'
         $result.reason = 'driver-related package name'
+    }
+    elseif ($normalizedName.Contains('application compatibility database') -or $normalizedName.Contains('setup wmi provider')) {
+        $result.bucket = 'sdk'
+        $result.recommendedAction = 'ignore'
+        $result.reason = 'developer support component'
+    }
+    elseif ($normalizedName -eq 'microsoft 365 en us' -or ($normalizedName.Contains('microsoft 365') -and $normalizedName.Contains('en us'))) {
+        $result.bucket = 'system-component'
+        $result.recommendedAction = 'ignore'
+        $result.reason = 'language or bundled office component'
     }
     elseif (@($developerPatterns | Where-Object { $normalizedName.Contains($_) }).Count -gt 0) {
         $result.bucket = 'developer-tool'

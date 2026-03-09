@@ -15,7 +15,7 @@
         "matchNames": [
           "Adobe SVG Viewer 3.0"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -55,7 +55,7 @@
         "matchNames": [
           "Application Verifier x64 External Package"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -95,7 +95,7 @@
         "matchNames": [
           "calibrite PROFILER 1.3.1"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -152,7 +152,7 @@
         "matchNames": [
           "Calman Home"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -192,7 +192,7 @@
         "matchNames": [
           "Canon IJ Scan Utility"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -232,7 +232,7 @@
         "matchNames": [
           "Canon MX390 series MP Drivers"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -272,7 +272,7 @@
         "matchNames": [
           "Canon My Image Garden"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -312,7 +312,7 @@
         "matchNames": [
           "Canon My Image Garden Design Files"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -352,7 +352,7 @@
         "matchNames": [
           "DisplayCAL"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -407,7 +407,7 @@
         "matchNames": [
           "Final Draft"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -447,7 +447,7 @@
         "matchNames": [
           "FORScan version 2.4.9.beta"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -487,7 +487,7 @@
         "matchNames": [
           "Google Chrome"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -563,7 +563,7 @@
         "matchNames": [
           "Google Earth Pro"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -611,7 +611,7 @@
         "matchNames": [
           "iCloud Outlook"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -621,8 +621,8 @@
         "localCandidates": [],
         "discoveredAt": "2026-03-09T04:50:07.2671981+00:00",
         "wingetId": "Apple.iCloud",
-        "downloadedPath": null,
-        "ready": false,
+        "downloadedPath": "C:\\Users\\engli\\dev\\apps-installing\\output\\staged-installers\\icloud-outlook\\iCloud (Legacy)_7.21.0.23_Machine_X64_exe_en-US.exe",
+        "ready": true,
         "wingetCandidates": [
           {
             "name": "iCloud (Legacy)",
@@ -659,7 +659,7 @@
         "matchNames": [
           "IIS 10.0 Express"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -693,13 +693,13 @@
       "name": "IIS Express Application Compatibility Database for x64",
       "publisher": null,
       "expectedVersion": null,
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "IIS Express Application Compatibility Database for x64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -718,9 +718,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "developer-tool",
-        "recommendedAction": "keep",
-        "reason": "developer-tool package name"
+        "bucket": "sdk",
+        "recommendedAction": "ignore",
+        "reason": "developer support component"
       },
       "latest": {
         "version": null,
@@ -733,13 +733,13 @@
       "name": "IIS Express Application Compatibility Database for x86",
       "publisher": null,
       "expectedVersion": null,
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "IIS Express Application Compatibility Database for x86"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -758,9 +758,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "developer-tool",
-        "recommendedAction": "keep",
-        "reason": "developer-tool package name"
+        "bucket": "sdk",
+        "recommendedAction": "ignore",
+        "reason": "developer support component"
       },
       "latest": {
         "version": null,
@@ -779,7 +779,7 @@
         "matchNames": [
           "Intel(R) Processor Graphics"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": "Intel(R) Processor Graphics",
         "lastSeenVersion": "20.19.15.4835"
       },
@@ -819,7 +819,7 @@
         "matchNames": [
           "Kits Configuration Installer"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -859,7 +859,7 @@
         "matchNames": [
           "Lenovo Service Bridge"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -907,7 +907,7 @@
         "matchNames": [
           "Messenger"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -947,7 +947,7 @@
         "matchNames": [
           "Microsoft .NET CoreRuntime For CoreCon"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -987,7 +987,7 @@
         "matchNames": [
           "Microsoft .NET CoreRuntime SDK"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1021,13 +1021,13 @@
       "name": "Microsoft .NET Host - 6.0.36 (x64)",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "48.144.23141",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "Microsoft .NET Host - 6.0.36 (x64)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1046,9 +1046,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "application",
-        "recommendedAction": "keep",
-        "reason": "default application classification"
+        "bucket": "runtime",
+        "recommendedAction": "ignore",
+        "reason": "runtime or redistributable component"
       },
       "latest": {
         "version": null,
@@ -1061,13 +1061,13 @@
       "name": "Microsoft .NET Host - 6.0.36 (x86)",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "48.144.23141",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "Microsoft .NET Host - 6.0.36 (x86)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1086,9 +1086,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "application",
-        "recommendedAction": "keep",
-        "reason": "default application classification"
+        "bucket": "runtime",
+        "recommendedAction": "ignore",
+        "reason": "runtime or redistributable component"
       },
       "latest": {
         "version": null,
@@ -1101,13 +1101,13 @@
       "name": "Microsoft .NET Host FX Resolver - 6.0.36 (x64)",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "48.144.23141",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "Microsoft .NET Host FX Resolver - 6.0.36 (x64)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1126,9 +1126,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "application",
-        "recommendedAction": "keep",
-        "reason": "default application classification"
+        "bucket": "runtime",
+        "recommendedAction": "ignore",
+        "reason": "runtime or redistributable component"
       },
       "latest": {
         "version": null,
@@ -1141,13 +1141,13 @@
       "name": "Microsoft .NET Host FX Resolver - 6.0.36 (x86)",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "48.144.23141",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "Microsoft .NET Host FX Resolver - 6.0.36 (x86)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1166,9 +1166,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "application",
-        "recommendedAction": "keep",
-        "reason": "default application classification"
+        "bucket": "runtime",
+        "recommendedAction": "ignore",
+        "reason": "runtime or redistributable component"
       },
       "latest": {
         "version": null,
@@ -1181,13 +1181,13 @@
       "name": "Microsoft .NET Native SDK",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "15.0.24211.07",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "Microsoft .NET Native SDK"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1206,9 +1206,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "application",
-        "recommendedAction": "keep",
-        "reason": "default application classification"
+        "bucket": "sdk",
+        "recommendedAction": "ignore",
+        "reason": "sdk or developer support component"
       },
       "latest": {
         "version": null,
@@ -1221,13 +1221,13 @@
       "name": "Microsoft .NET Runtime - 6.0.36 (x64)",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "48.144.23141",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "Microsoft .NET Runtime - 6.0.36 (x64)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1246,9 +1246,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "application",
-        "recommendedAction": "keep",
-        "reason": "default application classification"
+        "bucket": "runtime",
+        "recommendedAction": "ignore",
+        "reason": "runtime or redistributable component"
       },
       "latest": {
         "version": null,
@@ -1261,13 +1261,13 @@
       "name": "Microsoft .NET Runtime - 6.0.36 (x86)",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "48.144.23141",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "Microsoft .NET Runtime - 6.0.36 (x86)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1286,9 +1286,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "application",
-        "recommendedAction": "keep",
-        "reason": "default application classification"
+        "bucket": "runtime",
+        "recommendedAction": "ignore",
+        "reason": "runtime or redistributable component"
       },
       "latest": {
         "version": null,
@@ -1307,7 +1307,7 @@
         "matchNames": [
           "Microsoft .NET Standard Targeting Pack - 2.1.0 (x64)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1341,15 +1341,15 @@
       "name": "Microsoft 365 - en-us",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "16.0.19725.20152",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "installed",
       "detection": {
         "matchNames": [
           "Microsoft 365 - en-us"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": null,
-        "lastSeenVersion": null
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft 365 - en-us",
+        "lastSeenVersion": "16.0.19725.20126"
       },
       "installer": {
         "localPath": null,
@@ -1367,8 +1367,8 @@
       "notes": null,
       "classification": {
         "bucket": "system-component",
-        "recommendedAction": "review",
-        "reason": "microsoft system-related package"
+        "recommendedAction": "ignore",
+        "reason": "language or bundled office component"
       },
       "latest": {
         "version": null,
@@ -1388,7 +1388,7 @@
           "Microsoft ASP.NET Core 6.0.36 - Shared Framework (x64)",
           "Microsoft ASP.NET Core 6.0.36 Shared Framework (x64)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1429,7 +1429,7 @@
           "Microsoft ASP.NET Core 6.0.36 - Shared Framework (x86)",
           "Microsoft ASP.NET Core 6.0.36 Shared Framework (x86)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1469,7 +1469,7 @@
         "matchNames": [
           "Microsoft Bing Service"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1509,7 +1509,7 @@
         "matchNames": [
           "Microsoft Build of OpenJDK with Hotspot 11.0.12+7 (x64)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1557,7 +1557,7 @@
         "matchNames": [
           "Microsoft Edge"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": "Microsoft Edge",
         "lastSeenVersion": "145.0.3800.97"
       },
@@ -1597,7 +1597,7 @@
         "matchNames": [
           "Microsoft Edge WebView2 Runtime"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": "Microsoft Edge WebView2 Runtime",
         "lastSeenVersion": "145.0.3800.97"
       },
@@ -1637,7 +1637,7 @@
         "matchNames": [
           "Microsoft ODBC Driver 17 for SQL Server"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1685,9 +1685,9 @@
         "matchNames": [
           "Microsoft OneDrive"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": "Microsoft OneDrive",
-        "lastSeenVersion": "25.087.0506.0001"
+        "lastSeenVersion": "23.038.0219.0001"
       },
       "installer": {
         "localPath": null,
@@ -1725,7 +1725,7 @@
         "matchNames": [
           "Microsoft SQL Server 2019 LocalDB "
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1765,7 +1765,7 @@
         "matchNames": [
           "Microsoft System CLR Types for SQL Server 2019"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1813,7 +1813,7 @@
         "matchNames": [
           "Microsoft Update Health Tools"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1853,7 +1853,7 @@
         "matchNames": [
           "Microsoft Visual C++ 2008 Redistributable - x86 9.0.21022"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1893,7 +1893,7 @@
         "matchNames": [
           "Microsoft Visual C++ 2008 Redistributable - x86 9.0.30729.6161"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1933,7 +1933,7 @@
         "matchNames": [
           "Microsoft Visual C++ 2010  x64 Redistributable - 10.0.40219"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -1973,7 +1973,7 @@
         "matchNames": [
           "Microsoft Visual C++ 2010  x86 Redistributable - 10.0.40219"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2013,7 +2013,7 @@
         "matchNames": [
           "Microsoft Visual C++ 2012 Redistributable (x64) - 11.0.61030"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2053,7 +2053,7 @@
         "matchNames": [
           "Microsoft Visual C++ 2012 Redistributable (x86) - 11.0.61030"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2093,9 +2093,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2012 x64 Additional Runtime - 11.0.61030"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2133,9 +2133,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2012 x64 Minimum Runtime - 11.0.61030"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2173,9 +2173,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2012 x86 Additional Runtime - 11.0.61030"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2213,9 +2213,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2012 x86 Minimum Runtime - 11.0.61030"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2253,7 +2253,7 @@
         "matchNames": [
           "Microsoft Visual C++ 2013 Redistributable (x64) - 12.0.30501"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2293,7 +2293,7 @@
         "matchNames": [
           "Microsoft Visual C++ 2013 Redistributable (x64) - 12.0.40664"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2333,7 +2333,7 @@
         "matchNames": [
           "Microsoft Visual C++ 2013 Redistributable (x86) - 12.0.40664"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2373,9 +2373,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2013 x64 Additional Runtime - 12.0.40664"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2413,9 +2413,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2013 x64 Minimum Runtime - 12.0.40664"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2453,9 +2453,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2013 x86 Additional Runtime - 12.0.40664"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2493,9 +2493,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2013 x86 Minimum Runtime - 12.0.40664"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2533,9 +2533,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2015-2022 Redistributable (x64) - 14.44.35211"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2015-2022 Redistributable (x64) - 14.40.33810",
-        "lastSeenVersion": "14.40.33810.0"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2015-2022 Redistributable (x64) - 14.44.35211",
+        "lastSeenVersion": "14.44.35211.0"
       },
       "installer": {
         "localPath": null,
@@ -2573,9 +2573,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2015-2022 Redistributable (x86) - 14.44.35211"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2015-2022 Redistributable (x64) - 14.40.33810",
-        "lastSeenVersion": "14.40.33810.0"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2015-2022 Redistributable (x86) - 14.44.35211",
+        "lastSeenVersion": "14.44.35211.0"
       },
       "installer": {
         "localPath": null,
@@ -2613,9 +2613,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.44.35211"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2653,9 +2653,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.44.35211"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2693,9 +2693,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2022 X86 Additional Runtime - 14.44.35211"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Additional Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X86 Additional Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2733,9 +2733,9 @@
         "matchNames": [
           "Microsoft Visual C++ 2022 X86 Minimum Runtime - 14.44.35211"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": "Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.40.33810",
-        "lastSeenVersion": "14.40.33810"
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Microsoft Visual C++ 2022 X86 Minimum Runtime - 14.44.35211",
+        "lastSeenVersion": "14.44.35211"
       },
       "installer": {
         "localPath": null,
@@ -2773,7 +2773,7 @@
         "matchNames": [
           "Microsoft Visual Studio Code (User)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": "Microsoft Visual Studio Code (User)",
         "lastSeenVersion": "1.110.1"
       },
@@ -2807,13 +2807,13 @@
       "name": "Microsoft Visual Studio Setup WMI Provider",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "3.7.2182.35401",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "Microsoft Visual Studio Setup WMI Provider"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2832,9 +2832,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "application",
-        "recommendedAction": "keep",
-        "reason": "default application classification"
+        "bucket": "sdk",
+        "recommendedAction": "ignore",
+        "reason": "developer support component"
       },
       "latest": {
         "version": null,
@@ -2853,7 +2853,7 @@
         "matchNames": [
           "Microsoft Web Deploy 4.0"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2901,7 +2901,7 @@
         "matchNames": [
           "Microsoft Windows Desktop Runtime - 6.0.36 (x64)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2941,7 +2941,7 @@
         "matchNames": [
           "Microsoft Windows Desktop Runtime - 6.0.36 (x86)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -2981,7 +2981,7 @@
         "matchNames": [
           "MSI Development Tools"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3015,13 +3015,13 @@
       "name": "MSXML 4.0 SP3 Parser",
       "publisher": "Microsoft Corporation",
       "expectedVersion": "4.30.2100.0",
-      "desired": true,
-      "status": "missing",
+      "desired": false,
+      "status": "ignored",
       "detection": {
         "matchNames": [
           "MSXML 4.0 SP3 Parser"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3040,9 +3040,9 @@
       },
       "notes": null,
       "classification": {
-        "bucket": "application",
-        "recommendedAction": "keep",
-        "reason": "default application classification"
+        "bucket": "system-component",
+        "recommendedAction": "ignore",
+        "reason": "system-managed or bundled component"
       },
       "latest": {
         "version": null,
@@ -3061,7 +3061,7 @@
         "matchNames": [
           "OBDwiz"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3096,14 +3096,14 @@
       "publisher": "Microsoft Corporation",
       "expectedVersion": "16.0.19725.20152",
       "desired": false,
-      "status": "ignored",
+      "status": "installed",
       "detection": {
         "matchNames": [
           "Office 16 Click-to-Run Extensibility Component"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": null,
-        "lastSeenVersion": null
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Office 16 Click-to-Run Extensibility Component",
+        "lastSeenVersion": "16.0.19725.20014"
       },
       "installer": {
         "localPath": null,
@@ -3136,14 +3136,14 @@
       "publisher": "Microsoft Corporation",
       "expectedVersion": "16.0.18730.20168",
       "desired": false,
-      "status": "ignored",
+      "status": "installed",
       "detection": {
         "matchNames": [
           "Office 16 Click-to-Run Licensing Component"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
-        "lastSeenName": null,
-        "lastSeenVersion": null
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
+        "lastSeenName": "Office 16 Click-to-Run Extensibility Component",
+        "lastSeenVersion": "16.0.19725.20014"
       },
       "installer": {
         "localPath": null,
@@ -3181,7 +3181,7 @@
         "matchNames": [
           "PhpStorm 2022.1.3"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3229,7 +3229,7 @@
         "matchNames": [
           "PowerShell 7-x64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": "PowerShell 7-x64",
         "lastSeenVersion": "7.5.4.0"
       },
@@ -3269,7 +3269,7 @@
         "matchNames": [
           "PowerShell 7.5.4.0-x64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": "PowerShell 7-x64",
         "lastSeenVersion": "7.5.4.0"
       },
@@ -3309,7 +3309,7 @@
         "matchNames": [
           "PTSTroubleShooter"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3349,7 +3349,7 @@
         "matchNames": [
           "Raspberry Pi Imager"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3397,7 +3397,7 @@
         "matchNames": [
           "Realtek Card Reader"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3437,7 +3437,7 @@
         "matchNames": [
           "SDK ARM Additions"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3477,7 +3477,7 @@
         "matchNames": [
           "SDK ARM Redistributables"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3517,7 +3517,7 @@
         "matchNames": [
           "Universal CRT Extension SDK"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3557,7 +3557,7 @@
         "matchNames": [
           "Universal CRT Headers Libraries and Sources"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3597,7 +3597,7 @@
         "matchNames": [
           "Universal CRT Redistributable"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3637,7 +3637,7 @@
         "matchNames": [
           "Universal CRT Tools x64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3677,7 +3677,7 @@
         "matchNames": [
           "Universal CRT Tools x86"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3717,7 +3717,7 @@
         "matchNames": [
           "Universal General MIDI DLS Extension SDK"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3757,7 +3757,7 @@
         "matchNames": [
           "Update for x64-based Windows Systems (KB5001716)"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3797,7 +3797,7 @@
         "matchNames": [
           "vs_CoreEditorFonts"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3837,7 +3837,7 @@
         "matchNames": [
           "Webasto Thermo Test 2.14"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3877,7 +3877,7 @@
         "matchNames": [
           "Webasto Thermo Test 3.4"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3917,7 +3917,7 @@
         "matchNames": [
           "WinAppDeploy"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3957,7 +3957,7 @@
         "matchNames": [
           "Windows App Certification Kit Native Components"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -3997,7 +3997,7 @@
         "matchNames": [
           "Windows App Certification Kit SupportedApiList x86"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4037,7 +4037,7 @@
         "matchNames": [
           "Windows App Certification Kit x64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4077,7 +4077,7 @@
         "matchNames": [
           "Windows Desktop Extension SDK"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4117,7 +4117,7 @@
         "matchNames": [
           "Windows Desktop Extension SDK Contracts"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4157,7 +4157,7 @@
         "matchNames": [
           "Windows IoT Extension SDK"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4197,7 +4197,7 @@
         "matchNames": [
           "Windows IoT Extension SDK Contracts"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4237,7 +4237,7 @@
         "matchNames": [
           "Windows Mobile Extension SDK"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4277,7 +4277,7 @@
         "matchNames": [
           "Windows Mobile Extension SDK Contracts"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4317,7 +4317,7 @@
         "matchNames": [
           "Windows PC Health Check"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4365,7 +4365,7 @@
         "matchNames": [
           "Windows SDK"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4405,7 +4405,7 @@
         "matchNames": [
           "Windows SDK AddOn"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4445,7 +4445,7 @@
         "matchNames": [
           "Windows SDK ARM Desktop Tools"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4485,7 +4485,7 @@
         "matchNames": [
           "Windows SDK Desktop Headers arm"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4525,7 +4525,7 @@
         "matchNames": [
           "Windows SDK Desktop Headers arm64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4565,7 +4565,7 @@
         "matchNames": [
           "Windows SDK Desktop Headers x64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4605,7 +4605,7 @@
         "matchNames": [
           "Windows SDK Desktop Headers x86"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4645,7 +4645,7 @@
         "matchNames": [
           "Windows SDK Desktop Libs arm"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4685,7 +4685,7 @@
         "matchNames": [
           "Windows SDK Desktop Libs arm64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4725,7 +4725,7 @@
         "matchNames": [
           "Windows SDK Desktop Libs x64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4765,7 +4765,7 @@
         "matchNames": [
           "Windows SDK Desktop Libs x86"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4805,7 +4805,7 @@
         "matchNames": [
           "Windows SDK Desktop Tools arm64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4845,7 +4845,7 @@
         "matchNames": [
           "Windows SDK Desktop Tools x64"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4885,7 +4885,7 @@
         "matchNames": [
           "Windows SDK Desktop Tools x86"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4925,7 +4925,7 @@
         "matchNames": [
           "Windows SDK DirectX x64 Remote"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -4965,7 +4965,7 @@
         "matchNames": [
           "Windows SDK DirectX x86 Remote"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5005,7 +5005,7 @@
         "matchNames": [
           "Windows SDK EULA"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5045,7 +5045,7 @@
         "matchNames": [
           "Windows SDK Facade Windows WinMD Versioned"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5085,7 +5085,7 @@
         "matchNames": [
           "Windows SDK for Windows Store Apps"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5125,7 +5125,7 @@
         "matchNames": [
           "Windows SDK for Windows Store Apps Contracts"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5165,7 +5165,7 @@
         "matchNames": [
           "Windows SDK for Windows Store Apps DirectX x86 Remote"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5205,7 +5205,7 @@
         "matchNames": [
           "Windows SDK for Windows Store Apps Headers"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5245,7 +5245,7 @@
         "matchNames": [
           "Windows SDK for Windows Store Apps Libs"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5285,7 +5285,7 @@
         "matchNames": [
           "Windows SDK for Windows Store Apps Metadata"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5325,7 +5325,7 @@
         "matchNames": [
           "Windows SDK for Windows Store Apps Tools"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5365,7 +5365,7 @@
         "matchNames": [
           "Windows SDK for Windows Store Managed Apps Libs"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5405,7 +5405,7 @@
         "matchNames": [
           "Windows SDK Modern Non-Versioned Developer Tools"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5445,7 +5445,7 @@
         "matchNames": [
           "Windows SDK Modern Versioned Developer Tools"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5485,7 +5485,7 @@
         "matchNames": [
           "Windows SDK Redistributables"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5525,7 +5525,7 @@
         "matchNames": [
           "Windows SDK Signing Tools"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5565,7 +5565,7 @@
         "matchNames": [
           "Windows Software Development Kit - Windows 10.0.19041.685"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5605,7 +5605,7 @@
         "matchNames": [
           "Windows Subsystem for Linux Update"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": "Windows Subsystem for Linux",
         "lastSeenVersion": "2.6.3.0"
       },
@@ -5645,7 +5645,7 @@
         "matchNames": [
           "Windows Team Extension SDK"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5685,7 +5685,7 @@
         "matchNames": [
           "Windows Team Extension SDK Contracts"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5725,7 +5725,7 @@
         "matchNames": [
           "WinRT Intellisense Desktop - en-us"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5765,7 +5765,7 @@
         "matchNames": [
           "WinRT Intellisense Desktop - Other Languages"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5805,7 +5805,7 @@
         "matchNames": [
           "WinRT Intellisense IoT - en-us"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5845,7 +5845,7 @@
         "matchNames": [
           "WinRT Intellisense IoT - Other Languages"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5885,7 +5885,7 @@
         "matchNames": [
           "WinRT Intellisense Mobile - en-us"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5925,7 +5925,7 @@
         "matchNames": [
           "WinRT Intellisense PPI - en-us"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -5965,7 +5965,7 @@
         "matchNames": [
           "WinRT Intellisense PPI - Other Languages"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -6005,7 +6005,7 @@
         "matchNames": [
           "WinRT Intellisense UAP - en-us"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
@@ -6045,7 +6045,7 @@
         "matchNames": [
           "WinRT Intellisense UAP - Other Languages"
         ],
-        "lastCheckedAt": "2026-03-09T05:21:22.4716615+00:00",
+        "lastCheckedAt": "2026-03-09T05:47:46.1063118+00:00",
         "lastSeenName": null,
         "lastSeenVersion": null
       },
