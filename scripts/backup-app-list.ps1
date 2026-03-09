@@ -1,313 +1,395 @@
-# backup-app-list.ps1
-# Creates a reinstall reference pack for apps/utilities before formatting Windows
+[CmdletBinding()]
+param(
+    [string]$OutputRoot,
 
-$ErrorActionPreference = "SilentlyContinue"
+    [switch]$SkipWingetExport,
 
-function Ensure-Folder {
-    param([string]$Path)
-    if (!(Test-Path $Path)) {
-        New-Item -ItemType Directory -Path $Path | Out-Null
+    [switch]$SkipStoreApps,
+
+    [switch]$SkipFolderListings
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+Import-Module (Join-Path -Path $PSScriptRoot -ChildPath 'lib\AppCatalog.psm1') -Force
+
+function Resolve-BackupBasePath {
+    param(
+        [AllowNull()]
+        [string]$PreferredPath
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($PreferredPath)) {
+        return Resolve-AppPath -Path $PreferredPath
     }
+
+    $candidates = @(
+        (Join-Path -Path $env:USERPROFILE -ChildPath 'OneDrive\Documents'),
+        [Environment]::GetFolderPath('MyDocuments'),
+        $env:TEMP
+    )
+
+    foreach ($candidate in $candidates) {
+        if (-not [string]::IsNullOrWhiteSpace($candidate) -and (Test-Path -LiteralPath $candidate)) {
+            return [System.IO.Path]::GetFullPath($candidate)
+        }
+    }
+
+    throw 'Unable to determine a valid output folder for the backup pack.'
+}
+
+function Ensure-Directory {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Path
+    )
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        New-Item -ItemType Directory -Path $Path -Force | Out-Null
+    }
+
+    return $Path
 }
 
 function Write-Section {
     param(
+        [Parameter(Mandatory)]
         [string]$Title,
-        [string]$File
+
+        [Parameter(Mandatory)]
+        [string]$FilePath
     )
-    Add-Content -Path $File -Value ""
-    Add-Content -Path $File -Value ("=" * 80)
-    Add-Content -Path $File -Value $Title
-    Add-Content -Path $File -Value ("=" * 80)
-}
 
-function Get-SafeFolder {
-    param([string]$PreferredPath)
-
-    if (Test-Path $PreferredPath) {
-        return $PreferredPath
-    }
-
-    $fallback = Join-Path $env:USERPROFILE "Documents"
-    if (Test-Path $fallback) {
-        return $fallback
-    }
-
-    return $env:TEMP
+    Add-Content -LiteralPath $FilePath -Value ''
+    Add-Content -LiteralPath $FilePath -Value ('=' * 80)
+    Add-Content -LiteralPath $FilePath -Value $Title
+    Add-Content -LiteralPath $FilePath -Value ('=' * 80)
 }
 
 function Export-InstalledPrograms {
-    param([string]$OutCsv, [string]$OutTxt)
+    param(
+        [Parameter(Mandatory)]
+        [string]$CatalogCsvPath,
 
-    $programs = Get-ItemProperty `
-        HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*, `
-        HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*, `
-        HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
-        Where-Object { $_.DisplayName } |
-        Select-Object DisplayName, DisplayVersion, Publisher, InstallDate, InstallLocation, UninstallString |
-        Sort-Object DisplayName -Unique
+        [Parameter(Mandatory)]
+        [string]$DetailedCsvPath,
 
-    $programs | Export-Csv -Path $OutCsv -NoTypeInformation -Encoding UTF8
-    $programs | Format-Table -AutoSize | Out-String -Width 4096 | Set-Content -Path $OutTxt -Encoding UTF8
+        [Parameter(Mandatory)]
+        [string]$TextPath
+    )
 
-    return $programs
+    $programs = @(Get-InstalledProgramInventory)
+    $catalogRows = @(
+        $programs |
+            Select-Object DisplayName, DisplayVersion, Publisher
+    )
+
+    $catalogRows | Export-Csv -LiteralPath $CatalogCsvPath -NoTypeInformation -Encoding UTF8
+    $programs | Export-Csv -LiteralPath $DetailedCsvPath -NoTypeInformation -Encoding UTF8
+    $programs |
+        Format-Table DisplayName, DisplayVersion, Publisher, Scope, Architecture -AutoSize |
+        Out-String -Width 4096 |
+        Set-Content -LiteralPath $TextPath -Encoding UTF8
+
+    return [PSCustomObject]@{
+        ProgramCount = $programs.Count
+        Programs = $programs
+    }
 }
 
-function Export-Winget {
-    param([string]$OutJson)
+function Export-WingetPackageList {
+    param(
+        [Parameter(Mandatory)]
+        [string]$OutputPath
+    )
 
-    $winget = Get-Command winget -ErrorAction SilentlyContinue
-    if ($winget) {
-        winget export -o $OutJson --include-versions --accept-source-agreements
-        return $true
+    if (-not (Get-Command winget.exe -ErrorAction SilentlyContinue)) {
+        return [PSCustomObject]@{
+            Exported = $false
+            Details = 'winget.exe not found'
+        }
     }
-    else {
-        return $false
+
+    $output = @(
+        & winget.exe export --output $OutputPath --include-versions --accept-source-agreements 2>&1
+    )
+    $exitCode = $LASTEXITCODE
+    if ($exitCode -ne 0) {
+        return [PSCustomObject]@{
+            Exported = $false
+            Details = ([string]::Join(' ', ($output | Select-Object -Last 3))).Trim()
+        }
+    }
+
+    return [PSCustomObject]@{
+        Exported = $true
+        Details = 'winget export completed'
     }
 }
 
-function Export-StartupApps {
-    param([string]$OutCsv)
+function Export-StartupItems {
+    param(
+        [Parameter(Mandatory)]
+        [string]$OutputPath
+    )
 
-    $startupItems = @()
-
+    $items = New-Object 'System.Collections.Generic.List[object]'
     $registryPaths = @(
-        "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run",
-        "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run",
-        "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run"
+        'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run',
+        'HKLM:\Software\Microsoft\Windows\CurrentVersion\Run',
+        'HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run'
     )
 
     foreach ($path in $registryPaths) {
-        if (Test-Path $path) {
-            $item = Get-ItemProperty -Path $path
-            foreach ($prop in $item.PSObject.Properties) {
-                if ($prop.Name -notmatch "^PS") {
-                    $startupItems += [PSCustomObject]@{
-                        Source = $path
-                        Name   = $prop.Name
-                        Value  = $prop.Value
-                    }
-                }
+        if (-not (Test-Path -LiteralPath $path)) {
+            continue
+        }
+
+        $item = Get-ItemProperty -LiteralPath $path
+        foreach ($property in $item.PSObject.Properties) {
+            if ($property.Name -match '^PS') {
+                continue
             }
+
+            $items.Add([PSCustomObject]@{
+                Source = $path
+                Name = [string]$property.Name
+                Value = [string]$property.Value
+            })
         }
     }
 
     $startupFolders = @(
-        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup",
-        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp"
+        (Join-Path -Path $env:APPDATA -ChildPath 'Microsoft\Windows\Start Menu\Programs\Startup'),
+        (Join-Path -Path $env:ProgramData -ChildPath 'Microsoft\Windows\Start Menu\Programs\StartUp')
     )
 
     foreach ($folder in $startupFolders) {
-        if (Test-Path $folder) {
-            Get-ChildItem -Path $folder -Force | ForEach-Object {
-                $startupItems += [PSCustomObject]@{
-                    Source = $folder
-                    Name   = $_.Name
-                    Value  = $_.FullName
-                }
-            }
+        if (-not (Test-Path -LiteralPath $folder)) {
+            continue
+        }
+
+        foreach ($file in @(Get-ChildItem -LiteralPath $folder -Force -ErrorAction SilentlyContinue)) {
+            $items.Add([PSCustomObject]@{
+                Source = $folder
+                Name = [string]$file.Name
+                Value = [string]$file.FullName
+            })
         }
     }
 
-    $startupItems | Sort-Object Source, Name | Export-Csv -Path $OutCsv -NoTypeInformation -Encoding UTF8
+    @($items) | Sort-Object Source, Name | Export-Csv -LiteralPath $OutputPath -NoTypeInformation -Encoding UTF8
 }
 
-function Export-Shortcuts {
+function Export-ShortcutInventory {
     param(
+        [Parameter(Mandatory)]
         [string[]]$Folders,
-        [string]$OutCsv
+
+        [Parameter(Mandatory)]
+        [string]$OutputPath
     )
 
-    $wsh = New-Object -ComObject WScript.Shell
-    $results = @()
+    $results = New-Object 'System.Collections.Generic.List[object]'
+    $shell = New-Object -ComObject WScript.Shell
 
-    foreach ($folder in $Folders) {
-        if (Test-Path $folder) {
-            Get-ChildItem -Path $folder -Recurse -Filter *.lnk -Force | ForEach-Object {
+    try {
+        foreach ($folder in $Folders) {
+            if ([string]::IsNullOrWhiteSpace($folder) -or -not (Test-Path -LiteralPath $folder)) {
+                continue
+            }
+
+            foreach ($shortcutFile in @(Get-ChildItem -LiteralPath $folder -Recurse -Filter '*.lnk' -Force -ErrorAction SilentlyContinue)) {
                 $targetPath = $null
                 try {
-                    $shortcut = $wsh.CreateShortcut($_.FullName)
-                    $targetPath = $shortcut.TargetPath
-                } catch {}
-
-                $results += [PSCustomObject]@{
-                    ShortcutName = $_.Name
-                    ShortcutPath = $_.FullName
-                    TargetPath   = $targetPath
-                    SourceFolder = $folder
+                    $shortcut = $shell.CreateShortcut($shortcutFile.FullName)
+                    $targetPath = [string]$shortcut.TargetPath
                 }
+                catch {
+                    $targetPath = $null
+                }
+
+                $results.Add([PSCustomObject]@{
+                    ShortcutName = [string]$shortcutFile.Name
+                    ShortcutPath = [string]$shortcutFile.FullName
+                    TargetPath = $targetPath
+                    SourceFolder = [string]$folder
+                })
             }
         }
     }
+    finally {
+        if ($null -ne $shell) {
+            [void][System.Runtime.InteropServices.Marshal]::ReleaseComObject($shell)
+        }
+    }
 
-    $results | Sort-Object ShortcutName | Export-Csv -Path $OutCsv -NoTypeInformation -Encoding UTF8
+    @($results) | Sort-Object SourceFolder, ShortcutName | Export-Csv -LiteralPath $OutputPath -NoTypeInformation -Encoding UTF8
 }
 
 function Export-TaskbarPins {
-    param([string]$OutCsv)
+    param(
+        [Parameter(Mandatory)]
+        [string]$OutputPath
+    )
 
-    $taskbarPath = Join-Path $env:APPDATA "Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
-
-    $wsh = New-Object -ComObject WScript.Shell
-    $results = @()
-
-    if (Test-Path $taskbarPath) {
-        Get-ChildItem -Path $taskbarPath -Filter *.lnk -Force | ForEach-Object {
-            $targetPath = $null
-            try {
-                $shortcut = $wsh.CreateShortcut($_.FullName)
-                $targetPath = $shortcut.TargetPath
-            } catch {}
-
-            $results += [PSCustomObject]@{
-                ShortcutName = $_.Name
-                ShortcutPath = $_.FullName
-                TargetPath   = $targetPath
-            }
-        }
-    }
-
-    $results | Sort-Object ShortcutName | Export-Csv -Path $OutCsv -NoTypeInformation -Encoding UTF8
+    $taskbarPath = Join-Path -Path $env:APPDATA -ChildPath 'Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar'
+    Export-ShortcutInventory -Folders @($taskbarPath) -OutputPath $OutputPath
 }
 
 function Export-FolderListings {
     param(
+        [Parameter(Mandatory)]
         [string[]]$Folders,
-        [string]$OutTxt
+
+        [Parameter(Mandatory)]
+        [string]$OutputPath
     )
 
-    if (Test-Path $OutTxt) {
-        Remove-Item $OutTxt -Force
+    if (Test-Path -LiteralPath $OutputPath) {
+        Remove-Item -LiteralPath $OutputPath -Force
     }
 
     foreach ($folder in $Folders) {
-        Write-Section -Title $folder -File $OutTxt
-        if (Test-Path $folder) {
-            Get-ChildItem -Path $folder -Force |
-                Select-Object Name, FullName, Mode, LastWriteTime |
-                Format-Table -AutoSize |
-                Out-String -Width 4096 |
-                Add-Content -Path $OutTxt
+        Write-Section -Title $folder -FilePath $OutputPath
+        if (-not (Test-Path -LiteralPath $folder)) {
+            Add-Content -LiteralPath $OutputPath -Value 'Path not found.'
+            continue
         }
-        else {
-            Add-Content -Path $OutTxt -Value "Path not found."
-        }
+
+        Get-ChildItem -LiteralPath $folder -Force -ErrorAction SilentlyContinue |
+            Select-Object Name, FullName, Mode, LastWriteTime |
+            Format-Table -AutoSize |
+            Out-String -Width 4096 |
+            Add-Content -LiteralPath $OutputPath
     }
 }
 
 function Export-StoreApps {
-    param([string]$OutCsv)
-
-    $apps = Get-AppxPackage |
-        Select-Object Name, Publisher, Version, InstallLocation |
-        Sort-Object Name
-
-    $apps | Export-Csv -Path $OutCsv -NoTypeInformation -Encoding UTF8
-}
-
-function Create-ReinstallChecklist {
     param(
-        [object[]]$Programs,
-        [string]$OutCsv
+        [Parameter(Mandatory)]
+        [string]$OutputPath
     )
 
-    $checklist = $Programs | Select-Object `
-        @{Name="AppName";Expression={$_.DisplayName}},
-        @{Name="Version";Expression={$_.DisplayVersion}},
-        @{Name="Publisher";Expression={$_.Publisher}},
-        @{Name="Reinstall";Expression={""}},
-        @{Name="Priority";Expression={""}},
-        @{Name="LicenseOrLoginNeeded";Expression={""}},
-        @{Name="Notes";Expression={""}}
+    $apps = @(
+        Get-AppxPackage -ErrorAction SilentlyContinue |
+            Select-Object Name, Publisher, Version, InstallLocation |
+            Sort-Object Name
+    )
 
-    $checklist | Export-Csv -Path $OutCsv -NoTypeInformation -Encoding UTF8
+    $apps | Export-Csv -LiteralPath $OutputPath -NoTypeInformation -Encoding UTF8
 }
 
-# Decide base output folder
-$preferredBase = Join-Path $env:USERPROFILE "OneDrive\Documents"
-$baseFolder = Get-SafeFolder -PreferredPath $preferredBase
+function Export-ReinstallChecklist {
+    param(
+        [Parameter(Mandatory)]
+        [object[]]$Programs,
 
-$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-$outFolder = Join-Path $baseFolder "Reinstall-App-Backup-$timestamp"
-Ensure-Folder -Path $outFolder
+        [Parameter(Mandatory)]
+        [string]$OutputPath
+    )
 
-Write-Host "Saving files to: $outFolder"
-Write-Host ""
+    $Programs |
+        Select-Object
+            @{ Name = 'AppName'; Expression = { $_.DisplayName } },
+            @{ Name = 'Version'; Expression = { $_.DisplayVersion } },
+            @{ Name = 'Publisher'; Expression = { $_.Publisher } },
+            @{ Name = 'Reinstall'; Expression = { '' } },
+            @{ Name = 'Priority'; Expression = { '' } },
+            @{ Name = 'LicenseOrLoginNeeded'; Expression = { '' } },
+            @{ Name = 'Notes'; Expression = { '' } } |
+        Export-Csv -LiteralPath $OutputPath -NoTypeInformation -Encoding UTF8
+}
 
-# Output file paths
-$installedCsv       = Join-Path $outFolder "installed-programs.csv"
-$installedTxt       = Join-Path $outFolder "installed-programs.txt"
-$wingetJson         = Join-Path $outFolder "winget-apps.json"
-$startupCsv         = Join-Path $outFolder "startup-items.csv"
-$desktopShortcuts   = Join-Path $outFolder "desktop-shortcuts.csv"
-$startMenuShortcuts = Join-Path $outFolder "startmenu-shortcuts.csv"
-$taskbarPinsCsv     = Join-Path $outFolder "taskbar-pinned-items.csv"
-$appFoldersTxt      = Join-Path $outFolder "common-app-folders.txt"
-$storeAppsCsv       = Join-Path $outFolder "store-apps.csv"
-$reinstallCsv       = Join-Path $outFolder "reinstall-checklist.csv"
-$summaryTxt         = Join-Path $outFolder "README-summary.txt"
+$timestamp = Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'
+$basePath = Resolve-BackupBasePath -PreferredPath $OutputRoot
+$backupFolder = Ensure-Directory -Path (Join-Path -Path $basePath -ChildPath ("Reinstall-App-Backup-$timestamp"))
 
-# Export data
-$programs = Export-InstalledPrograms -OutCsv $installedCsv -OutTxt $installedTxt
-$wingetOk = Export-Winget -OutJson $wingetJson
+Write-Host "Saving files to: $backupFolder"
+Write-Host ''
 
-Export-StartupApps -OutCsv $startupCsv
+$installedCsv = Join-Path -Path $backupFolder -ChildPath 'installed-programs.csv'
+$installedDetailedCsv = Join-Path -Path $backupFolder -ChildPath 'installed-programs-detailed.csv'
+$installedTxt = Join-Path -Path $backupFolder -ChildPath 'installed-programs.txt'
+$wingetJson = Join-Path -Path $backupFolder -ChildPath 'winget-apps.json'
+$startupCsv = Join-Path -Path $backupFolder -ChildPath 'startup-items.csv'
+$desktopShortcutsCsv = Join-Path -Path $backupFolder -ChildPath 'desktop-shortcuts.csv'
+$startMenuShortcutsCsv = Join-Path -Path $backupFolder -ChildPath 'startmenu-shortcuts.csv'
+$taskbarPinsCsv = Join-Path -Path $backupFolder -ChildPath 'taskbar-pinned-items.csv'
+$appFoldersTxt = Join-Path -Path $backupFolder -ChildPath 'common-app-folders.txt'
+$storeAppsCsv = Join-Path -Path $backupFolder -ChildPath 'store-apps.csv'
+$reinstallCsv = Join-Path -Path $backupFolder -ChildPath 'reinstall-checklist.csv'
+$summaryTxt = Join-Path -Path $backupFolder -ChildPath 'README-summary.txt'
 
-Export-Shortcuts `
-    -Folders @(
-        [Environment]::GetFolderPath("Desktop")
-    ) `
-    -OutCsv $desktopShortcuts
+$programExport = Export-InstalledPrograms -CatalogCsvPath $installedCsv -DetailedCsvPath $installedDetailedCsv -TextPath $installedTxt
+$wingetResult = if ($SkipWingetExport.IsPresent) {
+    [PSCustomObject]@{
+        Exported = $false
+        Details = 'winget export skipped'
+    }
+}
+else {
+    Export-WingetPackageList -OutputPath $wingetJson
+}
 
-Export-Shortcuts `
-    -Folders @(
-        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs",
-        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs"
-    ) `
-    -OutCsv $startMenuShortcuts
+Export-StartupItems -OutputPath $startupCsv
+Export-ShortcutInventory -Folders @([Environment]::GetFolderPath('Desktop')) -OutputPath $desktopShortcutsCsv
+Export-ShortcutInventory -Folders @(
+    (Join-Path -Path $env:APPDATA -ChildPath 'Microsoft\Windows\Start Menu\Programs'),
+    (Join-Path -Path $env:ProgramData -ChildPath 'Microsoft\Windows\Start Menu\Programs')
+) -OutputPath $startMenuShortcutsCsv
+Export-TaskbarPins -OutputPath $taskbarPinsCsv
 
-Export-TaskbarPins -OutCsv $taskbarPinsCsv
+if (-not $SkipFolderListings.IsPresent) {
+    Export-FolderListings -Folders @(
+        'C:\Program Files',
+        'C:\Program Files (x86)',
+        $env:LOCALAPPDATA,
+        $env:APPDATA
+    ) -OutputPath $appFoldersTxt
+}
 
-Export-FolderListings `
-    -Folders @(
-        "C:\Program Files",
-        "C:\Program Files (x86)",
-        "$env:LOCALAPPDATA",
-        "$env:APPDATA"
-    ) `
-    -OutTxt $appFoldersTxt
+if (-not $SkipStoreApps.IsPresent) {
+    Export-StoreApps -OutputPath $storeAppsCsv
+}
 
-Export-StoreApps -OutCsv $storeAppsCsv
-Create-ReinstallChecklist -Programs $programs -OutCsv $reinstallCsv
+Export-ReinstallChecklist -Programs $programExport.Programs -OutputPath $reinstallCsv
 
-# Summary
 @"
 Reinstall App Backup Summary
 Generated: $(Get-Date)
+Backup folder: $backupFolder
+
+Key file:
+- installed-programs.csv is the import-ready file for Initialize-AppCatalog.ps1
 
 Files included:
 - installed-programs.csv
+- installed-programs-detailed.csv
 - installed-programs.txt
 - reinstall-checklist.csv
 - startup-items.csv
 - desktop-shortcuts.csv
 - startmenu-shortcuts.csv
 - taskbar-pinned-items.csv
-- store-apps.csv
-- common-app-folders.txt
-- winget-apps.json $(if ($wingetOk) { "(created)" } else { "(winget not available)" })
+- winget-apps.json ($($wingetResult.Details))
+- store-apps.csv $(if ($SkipStoreApps.IsPresent) { '(skipped)' } else { '(created when available)' })
+- common-app-folders.txt $(if ($SkipFolderListings.IsPresent) { '(skipped)' } else { '(created)' })
+
+Program count: $($programExport.ProgramCount)
 
 Notes:
-- Portable apps may still need checking manually.
-- Browser extensions are not included here.
-- Game libraries and plugins may need separate backup/checking.
-- Review reinstall-checklist.csv and mark what you actually want back.
-"@ | Set-Content -Path $summaryTxt -Encoding UTF8
+- Replace the repository root installed-programs.csv with the one from this backup pack when preparing a reinstall catalog.
+- Portable apps, browser extensions, plugins, and game libraries may still need separate backup steps.
+- Review reinstall-checklist.csv and mark what you actually want back on the rebuilt machine.
+"@ | Set-Content -LiteralPath $summaryTxt -Encoding UTF8
 
-Write-Host "Done."
-Write-Host "Folder created:"
-Write-Host $outFolder
-Write-Host ""
-Write-Host "Open this folder and start with:"
-Write-Host " - reinstall-checklist.csv"
-Write-Host " - README-summary.txt"
+Write-Host 'Done.'
+Write-Host 'Folder created:'
+Write-Host $backupFolder
+Write-Host ''
+Write-Host 'Start with:'
+Write-Host ' - installed-programs.csv'
+Write-Host ' - reinstall-checklist.csv'
+Write-Host ' - README-summary.txt'

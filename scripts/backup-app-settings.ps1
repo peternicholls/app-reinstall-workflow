@@ -1,58 +1,140 @@
-$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-$documents = [Environment]::GetFolderPath("MyDocuments")
-$localDocuments = Join-Path $env:USERPROFILE "Documents"
-$backupRoot = Join-Path $documents "AppSettingsBackup_$timestamp"
-$logFile = Join-Path $backupRoot "backup-log.txt"
+[CmdletBinding()]
+param(
+    [string]$OutputRoot,
 
-New-Item -ItemType Directory -Path $backupRoot -Force | Out-Null
-
-$displayCalPath = Join-Path $env:APPDATA "DisplayCAL"
-$colorProfilesPath = "C:\Windows\System32\spool\drivers\color"
-
-$possibleCalmanPaths = @(
-    (Join-Path $documents "SpectraCal\Calman"),
-    (Join-Path $localDocuments "SpectraCal\Calman")
+    [switch]$SkipColorProfiles
 )
 
-function Log {
-    param([string]$Message)
-    $Message | Tee-Object -FilePath $logFile -Append
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+function Resolve-BackupBasePath {
+    param(
+        [AllowNull()]
+        [string]$PreferredPath
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($PreferredPath)) {
+        return [System.IO.Path]::GetFullPath($PreferredPath)
+    }
+
+    $candidates = @(
+        [Environment]::GetFolderPath('MyDocuments'),
+        (Join-Path -Path $env:USERPROFILE -ChildPath 'Documents'),
+        $env:TEMP
+    )
+
+    foreach ($candidate in $candidates) {
+        if (-not [string]::IsNullOrWhiteSpace($candidate) -and (Test-Path -LiteralPath $candidate)) {
+            return [System.IO.Path]::GetFullPath($candidate)
+        }
+    }
+
+    throw 'Unable to determine a valid settings backup folder.'
+}
+
+function Ensure-Directory {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Path
+    )
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        New-Item -ItemType Directory -Path $Path -Force | Out-Null
+    }
+
+    return $Path
+}
+
+$timestamp = Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'
+$documents = [Environment]::GetFolderPath('MyDocuments')
+$localDocuments = Join-Path -Path $env:USERPROFILE -ChildPath 'Documents'
+$backupRoot = Ensure-Directory -Path (Join-Path -Path (Resolve-BackupBasePath -PreferredPath $OutputRoot) -ChildPath "AppSettingsBackup_$timestamp")
+$logFile = Join-Path -Path $backupRoot -ChildPath 'backup-log.txt'
+$manifestPath = Join-Path -Path $backupRoot -ChildPath 'backup-manifest.json'
+
+function Write-Log {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Message
+    )
+
+    $timestampedMessage = '[{0}] {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Message
+    $timestampedMessage | Tee-Object -FilePath $logFile -Append | Out-Null
+}
+
+function Resolve-ExistingPath {
+    param(
+        [Parameter(Mandatory)]
+        [string[]]$Candidates
+    )
+
+    foreach ($candidate in $Candidates) {
+        if (-not [string]::IsNullOrWhiteSpace($candidate) -and (Test-Path -LiteralPath $candidate)) {
+            return [System.IO.Path]::GetFullPath($candidate)
+        }
+    }
+
+    return $null
 }
 
 function Copy-FolderIfExists {
     param (
-        [string]$Source,
-        [string]$DestinationName
+        [Parameter(Mandatory)]
+        [string[]]$SourceCandidates,
+
+        [Parameter(Mandatory)]
+        [string]$DestinationName,
+
+        [Parameter(Mandatory)]
+        [string]$Description
     )
 
-    if (Test-Path $Source) {
-        $destination = Join-Path $backupRoot $DestinationName
-        Log "Copying: $Source -> $destination"
-        Copy-Item -Path $Source -Destination $destination -Recurse -Force
-        return $true
-    } else {
-        Log "WARNING: Not found: $Source"
-        return $false
+    $source = Resolve-ExistingPath -Candidates $SourceCandidates
+    if ($null -eq $source) {
+        Write-Log "WARNING: Not found for $Description"
+        return [PSCustomObject]@{
+            Description = $Description
+            Source = $null
+            Destination = $null
+            Copied = $false
+        }
+    }
+
+    $destination = Join-Path -Path $backupRoot -ChildPath $DestinationName
+    Write-Log "Copying $Description: $source -> $destination"
+    Copy-Item -LiteralPath $source -Destination $destination -Recurse -Force
+
+    return [PSCustomObject]@{
+        Description = $Description
+        Source = $source
+        Destination = $destination
+        Copied = $true
     }
 }
 
-Log "Backup started: $(Get-Date)"
-Log "Backup folder: $backupRoot"
+Write-Log "Backup started"
+Write-Log "Backup folder: $backupRoot"
 
-Copy-FolderIfExists -Source $displayCalPath -DestinationName "DisplayCAL" | Out-Null
-Copy-FolderIfExists -Source $colorProfilesPath -DestinationName "ColorProfiles" | Out-Null
+$results = New-Object 'System.Collections.Generic.List[object]'
+$results.Add((Copy-FolderIfExists -SourceCandidates @((Join-Path -Path $env:APPDATA -ChildPath 'DisplayCAL')) -DestinationName 'DisplayCAL' -Description 'DisplayCAL settings'))
 
-$calmanCopied = $false
-foreach ($path in $possibleCalmanPaths) {
-    if (Copy-FolderIfExists -Source $path -DestinationName "Calman") {
-        $calmanCopied = $true
-        break
-    }
+if (-not $SkipColorProfiles.IsPresent) {
+    $results.Add((Copy-FolderIfExists -SourceCandidates @('C:\Windows\System32\spool\drivers\color') -DestinationName 'ColorProfiles' -Description 'Windows color profiles'))
 }
 
-if (-not $calmanCopied) {
-    Log "WARNING: No Calman folder found in expected locations."
+$results.Add((Copy-FolderIfExists -SourceCandidates @(
+    (Join-Path -Path $documents -ChildPath 'SpectraCal\Calman'),
+    (Join-Path -Path $localDocuments -ChildPath 'SpectraCal\Calman')
+) -DestinationName 'Calman' -Description 'Calman settings'))
+
+$manifest = [PSCustomObject]@{
+    generatedAt = (Get-Date).ToString('o')
+    backupRoot = $backupRoot
+    items = @($results)
 }
 
-Log "Backup completed: $(Get-Date)"
+$manifest | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $manifestPath -Encoding UTF8
+
+Write-Log 'Backup completed'
 Write-Host "Backup complete. Saved to: $backupRoot"
