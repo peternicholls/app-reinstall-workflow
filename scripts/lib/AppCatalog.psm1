@@ -548,6 +548,501 @@ function Get-DefaultInstallerExtensions {
     return @('.exe', '.msi', '.msix', '.msixbundle', '.appx', '.appxbundle', '.zip')
 }
 
+function Get-DefaultWebRequestHeaders {
+    return @{
+        'User-Agent' = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0 Safari/537.36'
+        'Accept-Language' = 'en-GB,en-US;q=0.9,en;q=0.8'
+    }
+}
+
+function Get-WebLinkPropertyValue {
+    param(
+        [Parameter(Mandatory)]
+        $Link,
+
+        [Parameter(Mandatory)]
+        [string[]]$PropertyNames
+    )
+
+    foreach ($propertyName in $PropertyNames) {
+        if ($Link.PSObject.Properties[$propertyName]) {
+            return [string]$Link.$propertyName
+        }
+    }
+
+    return ''
+}
+
+function Get-WebResponseCandidateUrls {
+    param(
+        [Parameter(Mandatory)]
+        $Response,
+
+        [Parameter(Mandatory)]
+        [string]$BaseUrl
+    )
+
+    $baseUri = [Uri]$BaseUrl
+    $candidates = [System.Collections.Generic.List[string]]::new()
+
+    foreach ($link in @($Response.Links)) {
+        $href = Get-WebLinkPropertyValue -Link $link -PropertyNames @('href', 'Href')
+        if (-not [string]::IsNullOrWhiteSpace($href)) {
+            $candidates.Add($href)
+        }
+    }
+
+    $rawContent = ''
+    if (Test-HasProperty -InputObject $Response -PropertyName 'Content' -and $null -ne $Response.Content) {
+        $rawContent = [string]$Response.Content
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($rawContent)) {
+        $decodedContent = [System.Net.WebUtility]::HtmlDecode($rawContent)
+
+        foreach ($match in [regex]::Matches($decodedContent, '(?i)href\s*=\s*["''][^"''#>]+["'']')) {
+            $rawHref = [string]$match.Value
+            $cleanHref = $rawHref -replace '^(?i)href\s*=\s*["'']', ''
+            $cleanHref = $cleanHref -replace '["'']$', ''
+            if (-not [string]::IsNullOrWhiteSpace($cleanHref)) {
+                $candidates.Add($cleanHref)
+            }
+        }
+
+        foreach ($match in [regex]::Matches($decodedContent, '(?i)https?://[^\s"''<>]+')) {
+            $candidates.Add([string]$match.Value)
+        }
+    }
+
+    $resolvedUrls = foreach ($candidate in $candidates) {
+        $workingCandidate = [string]$candidate
+        if ([string]::IsNullOrWhiteSpace($workingCandidate)) {
+            continue
+        }
+
+        $workingCandidate = $workingCandidate.Trim()
+        while ($workingCandidate.Length -gt 0 -and '.,;)]}>'.Contains($workingCandidate.Substring($workingCandidate.Length - 1, 1))) {
+            $workingCandidate = $workingCandidate.Substring(0, $workingCandidate.Length - 1)
+        }
+
+        if ([string]::IsNullOrWhiteSpace($workingCandidate)) {
+            continue
+        }
+
+        if ($workingCandidate.StartsWith('mailto:', [System.StringComparison]::OrdinalIgnoreCase) -or $workingCandidate.StartsWith('javascript:', [System.StringComparison]::OrdinalIgnoreCase)) {
+            continue
+        }
+
+        $workingCandidate = [System.Net.WebUtility]::HtmlDecode($workingCandidate)
+        if ($workingCandidate.Contains('%')) {
+            try {
+                $workingCandidate = [Uri]::UnescapeDataString($workingCandidate)
+            }
+            catch {
+            }
+        }
+
+        try {
+            [Uri]::new($baseUri, $workingCandidate).AbsoluteUri
+        }
+        catch {
+            continue
+        }
+    }
+
+    return @($resolvedUrls | Sort-Object -Unique)
+}
+
+function Get-AdditionalReferencePageUrls {
+    param(
+        [Parameter(Mandatory)]
+        [string]$PageUrl
+    )
+
+    $pageUri = [Uri]$PageUrl
+    $pageLower = $PageUrl.ToLowerInvariant()
+    $extraUrls = [System.Collections.Generic.List[string]]::new()
+
+    if ($pageUri.Host.EndsWith('microsoft.com') -and $pageLower.Contains('/download/details.aspx')) {
+        $idMatch = [regex]::Match([string]$pageUri.Query, '(?i)(?:^\?|&)id=([^&]+)')
+        if ($idMatch.Success) {
+            $extraUrls.Add('https://www.microsoft.com/en-us/download/confirmation.aspx?id=' + [Uri]::UnescapeDataString($idMatch.Groups[1].Value))
+        }
+    }
+
+    if ($pageUri.Host.EndsWith('techwebasto.com') -and -not $pageLower.Contains('/tech-tools/software.html')) {
+        $extraUrls.Add('https://www.techwebasto.com/tech-tools/software.html')
+    }
+
+    return @($extraUrls | Sort-Object -Unique)
+}
+
+function Test-DirectInstallerUrl {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Url
+    )
+
+    $urlLower = $Url.ToLowerInvariant()
+    if ($urlLower -match '\.(exe|msi|msix|msixbundle|appx|appxbundle|zip)([?#].*)?$') {
+        return $true
+    }
+
+    try {
+        $uri = [Uri]$Url
+        return $uri.Host -match '(^|\.)download\.microsoft\.com$'
+    }
+    catch {
+        return $false
+    }
+}
+
+function Get-InstallerCandidateScore {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Url,
+
+        [Parameter(Mandatory)]
+        [Uri]$ReferenceUri,
+
+        [Parameter(Mandatory)]
+        [string[]]$AppTokens,
+
+        [switch]$ForFollowUpPage
+    )
+
+    $candidateUri = [Uri]$Url
+    $candidateLower = $Url.ToLowerInvariant()
+    $score = 0
+
+    if ($candidateUri.Host -eq $ReferenceUri.Host) {
+        $score += 50
+    }
+    elseif ($candidateUri.Host.EndsWith('.' + $ReferenceUri.Host)) {
+        $score += 25
+    }
+
+    if ($candidateUri.Scheme -eq 'https') {
+        $score += 10
+    }
+
+    if ($candidateLower.Contains('download')) {
+        $score += 20
+    }
+
+    if ($candidateLower.Contains('setup') -or $candidateLower.Contains('installer')) {
+        $score += 10
+    }
+
+    if ($ForFollowUpPage) {
+        foreach ($keyword in @('confirmation.aspx', 'details.aspx', 'software', 'support', 'drivers', 'detailid=', 'downloads')) {
+            if ($candidateLower.Contains($keyword)) {
+                $score += 10
+            }
+        }
+    }
+
+    foreach ($token in $AppTokens) {
+        if ($candidateLower.Contains($token)) {
+            $score += 15
+        }
+    }
+
+    return $score
+}
+
+function Resolve-ManualReferenceDownload {
+    param(
+        [Parameter(Mandatory)]
+        $App,
+
+        [Parameter(Mandatory)]
+        [string]$ReferenceUrl,
+
+        [int]$MaxDepth = 2,
+
+        [int]$TimeoutSeconds = 120
+    )
+
+    function Resolve-FromPage {
+        param(
+            [Parameter(Mandatory)]
+            $CurrentApp,
+
+            [Parameter(Mandatory)]
+            [string]$CurrentUrl,
+
+            [Parameter(Mandatory)]
+            [int]$Depth,
+
+            [Parameter(Mandatory)]
+            $VisitedUrls,
+
+            [Parameter(Mandatory)]
+            [string[]]$SearchTokens,
+
+            [Parameter(Mandatory)]
+            [int]$DepthLimit,
+
+            [Parameter(Mandatory)]
+            [int]$RequestTimeoutSeconds
+        )
+
+        if ($VisitedUrls.Contains($CurrentUrl)) {
+            return $null
+        }
+
+        $null = $VisitedUrls.Add($CurrentUrl)
+
+        if (Test-DirectInstallerUrl -Url $CurrentUrl) {
+            return [PSCustomObject]@{
+                downloadUrl = $CurrentUrl
+                sourcePage = $CurrentUrl
+                detection = 'direct-url'
+            }
+        }
+
+        $currentUri = [Uri]$CurrentUrl
+
+        foreach ($bootstrapUrl in (Get-AdditionalReferencePageUrls -PageUrl $CurrentUrl)) {
+            if (-not $VisitedUrls.Contains($bootstrapUrl)) {
+                try {
+                    $bootstrapResolution = Resolve-FromPage -CurrentApp $CurrentApp -CurrentUrl $bootstrapUrl -Depth ($Depth + 1) -VisitedUrls $VisitedUrls -SearchTokens $SearchTokens -DepthLimit $DepthLimit -RequestTimeoutSeconds $RequestTimeoutSeconds
+                    if ($null -ne $bootstrapResolution) {
+                        return $bootstrapResolution
+                    }
+                }
+                catch {
+                }
+            }
+        }
+
+        try {
+            $response = Invoke-WebRequest -Uri $CurrentUrl -MaximumRedirection 5 -TimeoutSec $RequestTimeoutSeconds -Headers (Get-DefaultWebRequestHeaders)
+        }
+        catch {
+            return $null
+        }
+        $candidateUrls = @(
+            (Get-WebResponseCandidateUrls -Response $response -BaseUrl $CurrentUrl) +
+            (Get-AdditionalReferencePageUrls -PageUrl $CurrentUrl)
+        ) | Sort-Object -Unique
+
+        $directCandidates = @(
+            $candidateUrls |
+                Where-Object { Test-DirectInstallerUrl -Url $_ } |
+                ForEach-Object {
+                    [PSCustomObject]@{
+                        url = [string]$_
+                        score = Get-InstallerCandidateScore -Url ([string]$_) -ReferenceUri $currentUri -AppTokens $SearchTokens
+                    }
+                } |
+                Sort-Object -Property @(
+                    @{ Expression = 'score'; Descending = $true },
+                    'url'
+                )
+        )
+
+        if ($directCandidates.Count -gt 0) {
+            return [PSCustomObject]@{
+                downloadUrl = [string]$directCandidates[0].url
+                sourcePage = $CurrentUrl
+                detection = if ($Depth -eq 0) { 'page-link' } else { 'follow-up-page' }
+            }
+        }
+
+        if ($Depth -ge $DepthLimit) {
+            return $null
+        }
+
+        $followUpCandidates = @(
+            $candidateUrls |
+                Where-Object {
+                    -not $VisitedUrls.Contains($_) -and
+                    -not (Test-DirectInstallerUrl -Url $_)
+                } |
+                ForEach-Object {
+                    $score = Get-InstallerCandidateScore -Url ([string]$_) -ReferenceUri $currentUri -AppTokens $SearchTokens -ForFollowUpPage
+                    if ($score -lt 25) {
+                        return
+                    }
+
+                    [PSCustomObject]@{
+                        url = [string]$_
+                        score = $score
+                    }
+                } |
+                Where-Object { $null -ne $_ } |
+                Sort-Object -Property @(
+                    @{ Expression = 'score'; Descending = $true },
+                    'url'
+                ) |
+                Select-Object -First 5
+        )
+
+        foreach ($followUpCandidate in $followUpCandidates) {
+            try {
+                $followUpResolution = Resolve-FromPage -CurrentApp $CurrentApp -CurrentUrl ([string]$followUpCandidate.url) -Depth ($Depth + 1) -VisitedUrls $VisitedUrls -SearchTokens $SearchTokens -DepthLimit $DepthLimit -RequestTimeoutSeconds $RequestTimeoutSeconds
+                if ($null -ne $followUpResolution) {
+                    return $followUpResolution
+                }
+            }
+            catch {
+            }
+        }
+
+        return $null
+    }
+
+    $searchTokens = @(
+        (Get-SearchTokens -Value ([string]$App.name)) +
+        (Get-SearchTokens -Value ([string]$App.publisher))
+    ) | Select-Object -Unique
+
+    $visitedUrls = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+    return Resolve-FromPage -CurrentApp $App -CurrentUrl $ReferenceUrl -Depth 0 -VisitedUrls $visitedUrls -SearchTokens $searchTokens -DepthLimit $MaxDepth -RequestTimeoutSeconds $TimeoutSeconds
+}
+
+function Stage-ManualReferenceInstaller {
+    param(
+        [Parameter(Mandatory)]
+        $App,
+
+        [Parameter(Mandatory)]
+        [string]$StageDirectory,
+
+        [switch]$Force,
+
+        [int]$MaxDepth = 2,
+
+        [int]$TimeoutSeconds = 120
+    )
+
+    $referenceUrl = [string]$App.installer.manualReferenceUrl
+    if ([string]::IsNullOrWhiteSpace($referenceUrl)) {
+        return [PSCustomObject]@{
+            status = 'no-reference-url'
+            stagedPath = $null
+            downloadUrl = $null
+            detection = $null
+            details = 'no manual reference URL recorded'
+        }
+    }
+
+    $resolvedStageDirectory = Resolve-AppPath -Path $StageDirectory
+    if (-not (Test-Path -LiteralPath $resolvedStageDirectory)) {
+        New-Item -Path $resolvedStageDirectory -ItemType Directory -Force | Out-Null
+    }
+
+    if (-not $Force.IsPresent -and -not [string]::IsNullOrWhiteSpace([string]$App.installer.downloadedPath) -and (Test-Path -LiteralPath $App.installer.downloadedPath)) {
+        $App.installer.preferredSource = 'manual-url'
+        $App.installer.ready = $true
+        return [PSCustomObject]@{
+            status = 'downloaded'
+            stagedPath = [string]$App.installer.downloadedPath
+            downloadUrl = $null
+            detection = 'existing-file'
+            details = $null
+        }
+    }
+
+    $safeDirectoryName = (Normalize-AppText -Value ([string]$App.name)) -replace ' ', '-'
+    if ([string]::IsNullOrWhiteSpace($safeDirectoryName)) {
+        $safeDirectoryName = 'app'
+    }
+
+    $appStageDirectory = Join-Path -Path $resolvedStageDirectory -ChildPath $safeDirectoryName
+    if (-not (Test-Path -LiteralPath $appStageDirectory)) {
+        New-Item -Path $appStageDirectory -ItemType Directory -Force | Out-Null
+    }
+
+    $existingFile = @(
+        Get-ChildItem -LiteralPath $appStageDirectory -Recurse -File -ErrorAction SilentlyContinue |
+            Where-Object { (Get-DefaultInstallerExtensions) -contains $_.Extension.ToLowerInvariant() } |
+            Sort-Object LastWriteTime -Descending
+    ) | Select-Object -First 1
+
+    if ($null -ne $existingFile -and -not $Force.IsPresent) {
+        $App.installer.downloadedPath = $existingFile.FullName
+        $App.installer.preferredSource = 'manual-url'
+        $App.installer.ready = $true
+        return [PSCustomObject]@{
+            status = 'downloaded'
+            stagedPath = $existingFile.FullName
+            downloadUrl = $null
+            detection = 'existing-file'
+            details = $null
+        }
+    }
+
+    try {
+        $resolution = Resolve-ManualReferenceDownload -App $App -ReferenceUrl $referenceUrl -MaxDepth $MaxDepth -TimeoutSeconds $TimeoutSeconds
+    }
+    catch {
+        return [PSCustomObject]@{
+            status = 'error'
+            stagedPath = $null
+            downloadUrl = $null
+            detection = $null
+            details = $_.Exception.Message
+        }
+    }
+
+    if ($null -eq $resolution) {
+        return [PSCustomObject]@{
+            status = 'no-direct-link'
+            stagedPath = $null
+            downloadUrl = $null
+            detection = $null
+            details = 'reference page did not expose a direct installer link'
+        }
+    }
+
+    $downloadUrl = [string]$resolution.downloadUrl
+    $fileName = [System.IO.Path]::GetFileName(([Uri]$downloadUrl).AbsolutePath)
+    if ([string]::IsNullOrWhiteSpace($fileName)) {
+        $fileName = $safeDirectoryName + '.bin'
+    }
+
+    $destinationPath = Join-Path -Path $appStageDirectory -ChildPath $fileName
+    try {
+        if ($Force.IsPresent -or -not (Test-Path -LiteralPath $destinationPath)) {
+            Invoke-WebRequest -Uri $downloadUrl -OutFile $destinationPath -MaximumRedirection 5 -TimeoutSec $TimeoutSeconds -Headers (Get-DefaultWebRequestHeaders)
+        }
+    }
+    catch {
+        return [PSCustomObject]@{
+            status = 'error'
+            stagedPath = $null
+            downloadUrl = $downloadUrl
+            detection = [string]$resolution.detection
+            details = $_.Exception.Message
+        }
+    }
+
+    if (-not (Test-Path -LiteralPath $destinationPath)) {
+        return [PSCustomObject]@{
+            status = 'download-failed'
+            stagedPath = $null
+            downloadUrl = $downloadUrl
+            detection = [string]$resolution.detection
+            details = 'download completed without a staged file'
+        }
+    }
+
+    $App.installer.downloadedPath = $destinationPath
+    $App.installer.preferredSource = 'manual-url'
+    $App.installer.ready = $true
+
+    return [PSCustomObject]@{
+        status = 'downloaded'
+        stagedPath = $destinationPath
+        downloadUrl = $downloadUrl
+        detection = [string]$resolution.detection
+        details = $null
+    }
+}
+
 function Get-InstallerFileInventory {
     param(
         [Parameter(Mandatory)]
@@ -862,8 +1357,10 @@ Export-ModuleMember -Function @(
     'Get-AppInstallerCandidates',
     'Get-AppNameCandidates',
     'Get-DefaultInstallerExtensions',
+    'Get-DefaultWebRequestHeaders',
     'Get-InstalledProgramInventory',
     'Get-InstallerFileInventory',
+    'Resolve-ManualReferenceDownload',
     'Get-VersionlessAppText',
     'Get-WingetPackageById',
     'Get-WingetPackageCandidates',
@@ -872,6 +1369,7 @@ Export-ModuleMember -Function @(
     'Read-AppCatalog',
     'Resolve-AppPath',
     'Save-AppCatalog',
+    'Stage-ManualReferenceInstaller',
     'Test-HasProperty',
     'Update-AppCatalogStatuses'
 )

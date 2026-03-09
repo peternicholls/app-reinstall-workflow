@@ -6,7 +6,11 @@ param(
 
     [string]$QueuePath,
 
+    [string[]]$Name,
+
     [switch]$DownloadWithWinget,
+
+    [switch]$DownloadFromManualReferences,
 
     [switch]$IncludeInstalled,
 
@@ -42,6 +46,21 @@ else {
     @($apps | Where-Object { $_.status -ne 'installed' -and $_.desired -ne $false })
 }
 
+$nameFilters = @(
+    $Name |
+        Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) }
+)
+
+if ($nameFilters.Count -gt 0) {
+    $targetApps = @(
+        $targetApps |
+            Where-Object {
+                $appName = [string]$_.name
+                @($nameFilters | Where-Object { $appName -like $_ }).Count -gt 0
+            }
+    )
+}
+
 $resolvedStageDirectory = Resolve-AppPath -Path $StageDirectory
 $resolvedQueuePath = Resolve-AppPath -Path $QueuePath
 
@@ -70,6 +89,11 @@ $queue = foreach ($app in $targetApps) {
         $stagedPath = $destinationPath
         $app.installer.downloadedPath = $destinationPath
         $source = 'local'
+        $ready = $true
+    }
+    elseif (-not [string]::IsNullOrWhiteSpace([string]$app.installer.downloadedPath) -and (Test-Path -LiteralPath $app.installer.downloadedPath)) {
+        $stagedPath = [string]$app.installer.downloadedPath
+        $source = if ([string]::IsNullOrWhiteSpace([string]$app.installer.preferredSource)) { 'downloaded' } else { [string]$app.installer.preferredSource }
         $ready = $true
     }
     elseif ($DownloadWithWinget.IsPresent -and -not [string]::IsNullOrWhiteSpace([string]$app.installer.wingetId)) {
@@ -129,18 +153,48 @@ $queue = foreach ($app in $targetApps) {
                 if ($remainingItems.Count -eq 0) {
                     Remove-Item -LiteralPath $appStageDirectory -Force -ErrorAction SilentlyContinue
                 }
+
+                if ($DownloadFromManualReferences.IsPresent -and -not [string]::IsNullOrWhiteSpace([string]$app.installer.manualReferenceUrl)) {
+                    $manualResult = Stage-ManualReferenceInstaller -App $app -StageDirectory $resolvedStageDirectory -Force:$Force.IsPresent
+                    if ($manualResult.status -eq 'downloaded') {
+                        $stagedPath = $manualResult.stagedPath
+                        $source = 'manual-url'
+                        $ready = $true
+                        $details = $null
+                    }
+                    elseif ([string]::IsNullOrWhiteSpace($details)) {
+                        $details = [string]$manualResult.details
+                    }
+                }
             }
         }
     }
+    elseif ($DownloadFromManualReferences.IsPresent -and -not [string]::IsNullOrWhiteSpace([string]$app.installer.manualReferenceUrl)) {
+        $manualResult = Stage-ManualReferenceInstaller -App $app -StageDirectory $resolvedStageDirectory -Force:$Force.IsPresent
+        $stagedPath = $manualResult.stagedPath
+        $source = if ($manualResult.status -eq 'downloaded') { 'manual-url' } else { 'unresolved' }
+        $ready = ($manualResult.status -eq 'downloaded')
+        $details = [string]$manualResult.details
+    }
     else {
         if ([string]::IsNullOrWhiteSpace([string]$app.installer.localPath) -and [string]::IsNullOrWhiteSpace([string]$app.installer.wingetId)) {
-            $details = 'no local installer or winget id recorded'
+            if (-not [string]::IsNullOrWhiteSpace([string]$app.installer.manualReferenceUrl)) {
+                $details = 'manual reference URL exists but -DownloadFromManualReferences was not supplied'
+            }
+            else {
+                $details = 'no local installer or winget id recorded'
+            }
         }
         elseif (-not [string]::IsNullOrWhiteSpace([string]$app.installer.localPath)) {
             $details = 'local installer path is recorded but the file is missing'
         }
         else {
-            $details = 'winget id exists but -DownloadWithWinget was not supplied'
+            if (-not [string]::IsNullOrWhiteSpace([string]$app.installer.manualReferenceUrl)) {
+                $details = 'winget id exists but -DownloadWithWinget was not supplied; manual reference URL also available'
+            }
+            else {
+                $details = 'winget id exists but -DownloadWithWinget was not supplied'
+            }
         }
     }
 
