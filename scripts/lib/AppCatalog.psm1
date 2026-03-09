@@ -549,10 +549,81 @@ function Get-DefaultInstallerExtensions {
 }
 
 function Get-DefaultWebRequestHeaders {
-    return @{
+    param(
+        [AllowNull()]
+        [string]$Referer,
+
+        [switch]$ForBinaryDownload
+    )
+
+    $headers = @{
         'User-Agent' = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0 Safari/537.36'
         'Accept-Language' = 'en-GB,en-US;q=0.9,en;q=0.8'
+        'Accept' = if ($ForBinaryDownload.IsPresent) { '*/*' } else { 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' }
     }
+
+    if (-not [string]::IsNullOrWhiteSpace($Referer)) {
+        $headers['Referer'] = $Referer
+    }
+
+    return $headers
+}
+
+function Invoke-WebContentRequest {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Url,
+
+        [int]$TimeoutSeconds = 120,
+
+        [AllowNull()]
+        [string]$Referer
+    )
+
+    $curlCommand = Get-Command -Name 'curl.exe' -ErrorAction SilentlyContinue
+    if ($null -ne $curlCommand) {
+        $headers = Get-DefaultWebRequestHeaders -Referer $Referer
+        $curlArgs = @(
+            '--location',
+            '--silent',
+            '--show-error',
+            '--max-time', [string]$TimeoutSeconds,
+            '--user-agent', [string]$headers['User-Agent'],
+            '--header', ('Accept-Language: ' + [string]$headers['Accept-Language']),
+            '--header', ('Accept: ' + [string]$headers['Accept']),
+            '--url', $Url
+        )
+
+        if (-not [string]::IsNullOrWhiteSpace($Referer)) {
+            $curlArgs += @('--referer', $Referer)
+        }
+
+        try {
+            $rawOutput = @(& $curlCommand.Source @curlArgs)
+            if ($LASTEXITCODE -eq 0) {
+                $content = [string]::Join([Environment]::NewLine, @($rawOutput | ForEach-Object { [string]$_ }))
+                if (-not [string]::IsNullOrWhiteSpace($content)) {
+                    return [PSCustomObject]@{
+                        Content = $content
+                        Links = @()
+                    }
+                }
+            }
+        }
+        catch {
+        }
+    }
+
+    try {
+        $response = Invoke-WebRequest -Uri $Url -UseBasicParsing -MaximumRedirection 5 -TimeoutSec $TimeoutSeconds -Headers (Get-DefaultWebRequestHeaders -Referer $Referer)
+        if ($null -ne $response) {
+            return $response
+        }
+    }
+    catch {
+    }
+
+    return $null
 }
 
 function Get-WebLinkPropertyValue {
@@ -585,7 +656,12 @@ function Get-WebResponseCandidateUrls {
     $baseUri = [Uri]$BaseUrl
     $candidates = [System.Collections.Generic.List[string]]::new()
 
-    foreach ($link in @($Response.Links)) {
+    $linkCollection = @()
+    if ((Test-HasProperty -InputObject $Response -PropertyName 'Links') -and $null -ne $Response.Links) {
+        $linkCollection = @($Response.Links)
+    }
+
+    foreach ($link in $linkCollection) {
         $href = Get-WebLinkPropertyValue -Link $link -PropertyNames @('href', 'Href')
         if (-not [string]::IsNullOrWhiteSpace($href)) {
             $candidates.Add($href)
@@ -593,7 +669,7 @@ function Get-WebResponseCandidateUrls {
     }
 
     $rawContent = ''
-    if (Test-HasProperty -InputObject $Response -PropertyName 'Content' -and $null -ne $Response.Content) {
+    if ((Test-HasProperty -InputObject $Response -PropertyName 'Content') -and $null -ne $Response.Content) {
         $rawContent = [string]$Response.Content
     }
 
@@ -751,6 +827,230 @@ function Get-InstallerCandidateScore {
     return $score
 }
 
+function Get-ContentContextTokenScore {
+    param(
+        [AllowNull()]
+        [string]$Context,
+
+        [Parameter(Mandatory)]
+        [string[]]$AppTokens
+    )
+
+    $normalizedContext = Normalize-AppText -Value $Context
+    if ([string]::IsNullOrWhiteSpace($normalizedContext)) {
+        return 0
+    }
+
+    $score = 0
+    foreach ($token in $AppTokens) {
+        if ($normalizedContext.Contains($token)) {
+            $score += 20
+        }
+    }
+
+    return $score
+}
+
+function Get-MicrosoftDownloadCenterCandidates {
+    param(
+        [Parameter(Mandatory)]
+        [string]$PageUrl,
+
+        [AllowNull()]
+        [string]$RawContent,
+
+        [Parameter(Mandatory)]
+        [string[]]$AppTokens
+    )
+
+    if ([string]::IsNullOrWhiteSpace($RawContent)) {
+        return @()
+    }
+
+    $pageUri = [Uri]$PageUrl
+    if (-not $pageUri.Host.EndsWith('microsoft.com') -or -not $PageUrl.ToLowerInvariant().Contains('/download/details.aspx')) {
+        return @()
+    }
+
+    $detailsMatch = [regex]::Match($RawContent, 'window\.__DLCDetails__\s*=\s*(\{.+?\})\s*;', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    if (-not $detailsMatch.Success) {
+        return @()
+    }
+
+    try {
+        $detailsRoot = $detailsMatch.Groups[1].Value | ConvertFrom-Json
+    }
+    catch {
+        return @()
+    }
+
+    $detailsView = $detailsRoot.dlcDetailsView
+    if ($null -eq $detailsView) {
+        return @()
+    }
+
+    $referenceUri = [Uri]$PageUrl
+    $detailContext = [string]::Join(' ', @(
+        [string]$detailsView.downloadTitle,
+        [string]$detailsView.downloadDescription,
+        [string]$detailsView.detailsSection,
+        [string]$detailsView.installInstructionSection,
+        [string]$detailsView.additionalInformationSection
+    ))
+
+    return @(
+        @($detailsView.downloadFile) |
+            ForEach-Object {
+                $url = [string]$_.url
+                if ([string]::IsNullOrWhiteSpace($url)) {
+                    return
+                }
+
+                $fileName = [string]$_.name
+                $score = Get-InstallerCandidateScore -Url $url -ReferenceUri $referenceUri -AppTokens $AppTokens
+                $score += Get-ContentContextTokenScore -Context ($fileName + ' ' + $detailContext) -AppTokens $AppTokens
+
+                if ([string]$_.isPrimary -eq 'True') {
+                    $score += 120
+                }
+
+                if ($fileName -match '(?i)(amd64|x64)') {
+                    $score += 20
+                }
+
+                if ($fileName -match '(?i)(en-us|english)') {
+                    $score += 10
+                }
+
+                [PSCustomObject]@{
+                    url = $url
+                    score = $score
+                }
+            } |
+            Where-Object { $null -ne $_ } |
+            Sort-Object -Property @(
+                @{ Expression = 'score'; Descending = $true },
+                'url'
+            )
+    )
+}
+
+function Get-AttributeDownloadCandidates {
+    param(
+        [Parameter(Mandatory)]
+        [string]$PageUrl,
+
+        [AllowNull()]
+        [string]$RawContent,
+
+        [Parameter(Mandatory)]
+        [string[]]$AppTokens
+    )
+
+    if ([string]::IsNullOrWhiteSpace($RawContent)) {
+        return @()
+    }
+
+    $referenceUri = [Uri]$PageUrl
+    $decodedContent = [System.Net.WebUtility]::HtmlDecode($RawContent)
+    $matches = [regex]::Matches($decodedContent, '(?is)<[^>]*data-download-url\s*=\s*["''](?<url>[^"'']+)["''][^>]*>')
+    if ($matches.Count -eq 0) {
+        return @()
+    }
+
+    $candidates = foreach ($match in $matches) {
+        $rawUrl = [string]$match.Groups['url'].Value
+        if ([string]::IsNullOrWhiteSpace($rawUrl)) {
+            continue
+        }
+
+        try {
+            $absoluteUrl = [Uri]::new($referenceUri, $rawUrl).AbsoluteUri
+        }
+        catch {
+            continue
+        }
+
+        $snippetStart = [Math]::Max(0, $match.Index - 1200)
+        $snippetLength = [Math]::Min($decodedContent.Length - $snippetStart, 2400)
+        $snippet = $decodedContent.Substring($snippetStart, $snippetLength)
+
+        $score = Get-InstallerCandidateScore -Url $absoluteUrl -ReferenceUri $referenceUri -AppTokens $AppTokens
+        $score += Get-ContentContextTokenScore -Context ($match.Value + ' ' + $snippet) -AppTokens $AppTokens
+
+        [PSCustomObject]@{
+            url = $absoluteUrl
+            score = $score
+        }
+    }
+
+    return @(
+        $candidates |
+            Group-Object -Property url |
+            ForEach-Object {
+                $_.Group |
+                    Sort-Object -Property @(
+                        @{ Expression = 'score'; Descending = $true },
+                        'url'
+                    ) |
+                    Select-Object -First 1
+            } |
+            Sort-Object -Property @(
+                @{ Expression = 'score'; Descending = $true },
+                'url'
+            )
+    )
+}
+
+function Get-DownloadFileNameFromResponse {
+    param(
+        [AllowNull()]
+        $Response,
+
+        [AllowNull()]
+        [string]$FallbackFileName,
+
+        [Parameter(Mandatory)]
+        [string]$DefaultFileName
+    )
+
+    $fileName = $null
+
+    if ($null -ne $Response -and (Test-HasProperty -InputObject $Response -PropertyName 'Headers') -and $null -ne $Response.Headers) {
+        $contentDisposition = $null
+        if ($Response.Headers['Content-Disposition']) {
+            $contentDisposition = [string]$Response.Headers['Content-Disposition']
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace($contentDisposition)) {
+            $fileNameMatch = [regex]::Match($contentDisposition, '(?i)filename\*?=(?:UTF-8''''|"|)(?<name>[^";]+)')
+            if ($fileNameMatch.Success) {
+                $fileName = [string]$fileNameMatch.Groups['name'].Value.Trim()
+            }
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($fileName) -and $null -ne $Response -and (Test-HasProperty -InputObject $Response -PropertyName 'BaseResponse') -and $null -ne $Response.BaseResponse) {
+        $responseUri = $Response.BaseResponse.ResponseUri
+        if ($null -ne $responseUri) {
+            $candidate = [System.IO.Path]::GetFileName(([Uri]$responseUri).AbsolutePath)
+            if (-not [string]::IsNullOrWhiteSpace($candidate)) {
+                $fileName = $candidate
+            }
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($fileName)) {
+        $fileName = $FallbackFileName
+    }
+
+    if ([string]::IsNullOrWhiteSpace($fileName)) {
+        $fileName = $DefaultFileName
+    }
+
+    return $fileName
+}
+
 function Resolve-ManualReferenceDownload {
     param(
         [Parameter(Mandatory)]
@@ -764,78 +1064,89 @@ function Resolve-ManualReferenceDownload {
         [int]$TimeoutSeconds = 120
     )
 
-    function Resolve-FromPage {
-        param(
-            [Parameter(Mandatory)]
-            $CurrentApp,
+    $searchTokens = @(
+        (Get-SearchTokens -Value ([string]$App.name)) +
+        (Get-SearchTokens -Value ([string]$App.publisher))
+    ) | Select-Object -Unique
 
-            [Parameter(Mandatory)]
-            [string]$CurrentUrl,
+    $visitedUrls = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+    $pendingPages = [System.Collections.Generic.Queue[object]]::new()
+    $pendingPages.Enqueue([PSCustomObject]@{
+        url = $ReferenceUrl
+        depth = 0
+    })
 
-            [Parameter(Mandatory)]
-            [int]$Depth,
+    while ($pendingPages.Count -gt 0) {
+        $page = $pendingPages.Dequeue()
+        $currentUrl = [string]$page.url
+        $currentDepth = [int]$page.depth
 
-            [Parameter(Mandatory)]
-            $VisitedUrls,
-
-            [Parameter(Mandatory)]
-            [string[]]$SearchTokens,
-
-            [Parameter(Mandatory)]
-            [int]$DepthLimit,
-
-            [Parameter(Mandatory)]
-            [int]$RequestTimeoutSeconds
-        )
-
-        if ($VisitedUrls.Contains($CurrentUrl)) {
-            return $null
+        if ([string]::IsNullOrWhiteSpace($currentUrl) -or $visitedUrls.Contains($currentUrl)) {
+            continue
         }
 
-        $null = $VisitedUrls.Add($CurrentUrl)
+        $null = $visitedUrls.Add($currentUrl)
 
-        if (Test-DirectInstallerUrl -Url $CurrentUrl) {
+        if (Test-DirectInstallerUrl -Url $currentUrl) {
             return [PSCustomObject]@{
-                downloadUrl = $CurrentUrl
-                sourcePage = $CurrentUrl
+                downloadUrl = $currentUrl
+                sourcePage = $currentUrl
                 detection = 'direct-url'
             }
         }
 
-        $currentUri = [Uri]$CurrentUrl
-
-        foreach ($bootstrapUrl in (Get-AdditionalReferencePageUrls -PageUrl $CurrentUrl)) {
-            if (-not $VisitedUrls.Contains($bootstrapUrl)) {
-                try {
-                    $bootstrapResolution = Resolve-FromPage -CurrentApp $CurrentApp -CurrentUrl $bootstrapUrl -Depth ($Depth + 1) -VisitedUrls $VisitedUrls -SearchTokens $SearchTokens -DepthLimit $DepthLimit -RequestTimeoutSeconds $RequestTimeoutSeconds
-                    if ($null -ne $bootstrapResolution) {
-                        return $bootstrapResolution
+        $response = Invoke-WebContentRequest -Url $currentUrl -TimeoutSeconds $TimeoutSeconds
+        if ($null -eq $response) {
+            if ($currentDepth -lt $MaxDepth) {
+                foreach ($bootstrapUrl in (Get-AdditionalReferencePageUrls -PageUrl $currentUrl)) {
+                    if (-not $visitedUrls.Contains($bootstrapUrl)) {
+                        $pendingPages.Enqueue([PSCustomObject]@{
+                            url = $bootstrapUrl
+                            depth = $currentDepth + 1
+                        })
                     }
-                }
-                catch {
                 }
             }
+
+            continue
         }
 
-        try {
-            $response = Invoke-WebRequest -Uri $CurrentUrl -MaximumRedirection 5 -TimeoutSec $RequestTimeoutSeconds -Headers (Get-DefaultWebRequestHeaders)
+        $currentUri = [Uri]$currentUrl
+        $rawContent = ''
+        if ((Test-HasProperty -InputObject $response -PropertyName 'Content') -and $null -ne $response.Content) {
+            $rawContent = [string]$response.Content
         }
-        catch {
-            return $null
-        }
+
         $candidateUrls = @(
-            (Get-WebResponseCandidateUrls -Response $response -BaseUrl $CurrentUrl) +
-            (Get-AdditionalReferencePageUrls -PageUrl $CurrentUrl)
+            (Get-WebResponseCandidateUrls -Response $response -BaseUrl $currentUrl) +
+            (Get-AdditionalReferencePageUrls -PageUrl $currentUrl)
         ) | Sort-Object -Unique
 
+        $specialDirectCandidates = @(
+            (Get-MicrosoftDownloadCenterCandidates -PageUrl $currentUrl -RawContent $rawContent -AppTokens $searchTokens) +
+            (Get-AttributeDownloadCandidates -PageUrl $currentUrl -RawContent $rawContent -AppTokens $searchTokens)
+        )
+
         $directCandidates = @(
-            $candidateUrls |
-                Where-Object { Test-DirectInstallerUrl -Url $_ } |
-                ForEach-Object {
-                    [PSCustomObject]@{
-                        url = [string]$_
-                        score = Get-InstallerCandidateScore -Url ([string]$_) -ReferenceUri $currentUri -AppTokens $SearchTokens
+            $specialDirectCandidates +
+            @(
+                $candidateUrls |
+                    Where-Object { Test-DirectInstallerUrl -Url $_ } |
+                    ForEach-Object {
+                        [PSCustomObject]@{
+                            url = [string]$_
+                            score = Get-InstallerCandidateScore -Url ([string]$_) -ReferenceUri $currentUri -AppTokens $searchTokens
+                        }
                     }
+            ) |
+                Group-Object -Property url |
+                ForEach-Object {
+                    $_.Group |
+                        Sort-Object -Property @(
+                            @{ Expression = 'score'; Descending = $true },
+                            'url'
+                        ) |
+                        Select-Object -First 1
                 } |
                 Sort-Object -Property @(
                     @{ Expression = 'score'; Descending = $true },
@@ -846,23 +1157,23 @@ function Resolve-ManualReferenceDownload {
         if ($directCandidates.Count -gt 0) {
             return [PSCustomObject]@{
                 downloadUrl = [string]$directCandidates[0].url
-                sourcePage = $CurrentUrl
-                detection = if ($Depth -eq 0) { 'page-link' } else { 'follow-up-page' }
+                sourcePage = $currentUrl
+                detection = if ($currentDepth -eq 0) { 'page-link' } else { 'follow-up-page' }
             }
         }
 
-        if ($Depth -ge $DepthLimit) {
-            return $null
+        if ($currentDepth -ge $MaxDepth) {
+            continue
         }
 
         $followUpCandidates = @(
             $candidateUrls |
                 Where-Object {
-                    -not $VisitedUrls.Contains($_) -and
+                    -not $visitedUrls.Contains($_) -and
                     -not (Test-DirectInstallerUrl -Url $_)
                 } |
                 ForEach-Object {
-                    $score = Get-InstallerCandidateScore -Url ([string]$_) -ReferenceUri $currentUri -AppTokens $SearchTokens -ForFollowUpPage
+                    $score = Get-InstallerCandidateScore -Url ([string]$_) -ReferenceUri $currentUri -AppTokens $searchTokens -ForFollowUpPage
                     if ($score -lt 25) {
                         return
                     }
@@ -881,26 +1192,14 @@ function Resolve-ManualReferenceDownload {
         )
 
         foreach ($followUpCandidate in $followUpCandidates) {
-            try {
-                $followUpResolution = Resolve-FromPage -CurrentApp $CurrentApp -CurrentUrl ([string]$followUpCandidate.url) -Depth ($Depth + 1) -VisitedUrls $VisitedUrls -SearchTokens $SearchTokens -DepthLimit $DepthLimit -RequestTimeoutSeconds $RequestTimeoutSeconds
-                if ($null -ne $followUpResolution) {
-                    return $followUpResolution
-                }
-            }
-            catch {
-            }
+            $pendingPages.Enqueue([PSCustomObject]@{
+                url = [string]$followUpCandidate.url
+                depth = $currentDepth + 1
+            })
         }
-
-        return $null
     }
 
-    $searchTokens = @(
-        (Get-SearchTokens -Value ([string]$App.name)) +
-        (Get-SearchTokens -Value ([string]$App.publisher))
-    ) | Select-Object -Unique
-
-    $visitedUrls = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
-    return Resolve-FromPage -CurrentApp $App -CurrentUrl $ReferenceUrl -Depth 0 -VisitedUrls $visitedUrls -SearchTokens $searchTokens -DepthLimit $MaxDepth -RequestTimeoutSeconds $TimeoutSeconds
+    return $null
 }
 
 function Stage-ManualReferenceInstaller {
@@ -1001,13 +1300,24 @@ function Stage-ManualReferenceInstaller {
     $downloadUrl = [string]$resolution.downloadUrl
     $fileName = [System.IO.Path]::GetFileName(([Uri]$downloadUrl).AbsolutePath)
     if ([string]::IsNullOrWhiteSpace($fileName)) {
-        $fileName = $safeDirectoryName + '.bin'
+        $fileName = $safeDirectoryName + '.download'
     }
 
-    $destinationPath = Join-Path -Path $appStageDirectory -ChildPath $fileName
+    $temporaryPath = Join-Path -Path $appStageDirectory -ChildPath $fileName
+    $destinationPath = $temporaryPath
     try {
         if ($Force.IsPresent -or -not (Test-Path -LiteralPath $destinationPath)) {
-            Invoke-WebRequest -Uri $downloadUrl -OutFile $destinationPath -MaximumRedirection 5 -TimeoutSec $TimeoutSeconds -Headers (Get-DefaultWebRequestHeaders)
+            $downloadResponse = Invoke-WebRequest -Uri $downloadUrl -UseBasicParsing -OutFile $temporaryPath -PassThru -MaximumRedirection 5 -TimeoutSec $TimeoutSeconds -Headers (Get-DefaultWebRequestHeaders -Referer ([string]$resolution.sourcePage) -ForBinaryDownload)
+            $resolvedFileName = Get-DownloadFileNameFromResponse -Response $downloadResponse -FallbackFileName $fileName -DefaultFileName ($safeDirectoryName + '.bin')
+            $destinationPath = Join-Path -Path $appStageDirectory -ChildPath $resolvedFileName
+
+            if ($temporaryPath -ne $destinationPath) {
+                if (Test-Path -LiteralPath $destinationPath) {
+                    Remove-Item -LiteralPath $destinationPath -Force -Confirm:$false -ErrorAction SilentlyContinue
+                }
+
+                Move-Item -LiteralPath $temporaryPath -Destination $destinationPath -Force -Confirm:$false
+            }
         }
     }
     catch {
