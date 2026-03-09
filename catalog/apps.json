@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-03-09T04:43:17.4059961+00:00",
+  "generatedAt": "2026-03-09T06:09:59.7339645+00:00",
   "source": {
     "csvPath": "C:\\Users\\engli\\dev\\apps-installing\\installed-programs.csv"
   },
@@ -30,7 +30,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:20.4686674+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:20.4686674+00:00",
+        "manualAcquisitionType": "legacy-archive",
+        "manualSourceHint": "Internal software archive or archived vendor media",
+        "manualReferenceUrl": null,
+        "manualReason": "Legacy browser plugin with no current package source",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -70,7 +75,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:21.8777402+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:21.8777402+00:00",
+        "manualAcquisitionType": "microsoft-sdk-component",
+        "manualSourceHint": "Windows SDK or Visual Studio installer components",
+        "manualReferenceUrl": "https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/application-verifier",
+        "manualReason": "Developer verification component rather than a standalone desktop app",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -133,7 +143,12 @@
           }
         ],
         "installArgs": "/S",
-        "preferredSource": "local"
+        "preferredSource": "local",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -167,7 +182,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:10:40.4151912+00:00"
+        "wingetCheckedAt": "2026-03-09T05:10:40.4151912+00:00",
+        "manualAcquisitionType": "vendor-site",
+        "manualSourceHint": "Portrait Displays product and download pages",
+        "manualReferenceUrl": "https://www.portrait.com/trial-downloads/",
+        "manualReason": "Licensed calibration software with no safe package feed match",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -207,7 +227,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:10:41.1932141+00:00"
+        "wingetCheckedAt": "2026-03-09T05:10:41.1932141+00:00",
+        "manualAcquisitionType": "vendor-support",
+        "manualSourceHint": "Canon support and driver downloads",
+        "manualReferenceUrl": "https://www.canon-europe.com/supportproduct/tabcontent/?productTcmUri=tcm:13-1019644&type=drivers&language=en&os=all",
+        "manualReason": "Printer utility and driver packages are model-specific and should be sourced from the vendor",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -247,7 +272,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:13:59.6056998+00:00"
+        "wingetCheckedAt": "2026-03-09T05:13:59.6056998+00:00",
+        "manualAcquisitionType": "vendor-support",
+        "manualSourceHint": "Canon support and driver downloads",
+        "manualReferenceUrl": "https://www.canon-europe.com/supportproduct/tabcontent/?productTcmUri=tcm:13-1019644&type=drivers&language=en&os=all",
+        "manualReason": "Printer utility and driver packages are model-specific and should be sourced from the vendor",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -287,7 +317,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:00.6694455+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:00.6694455+00:00",
+        "manualAcquisitionType": "vendor-support",
+        "manualSourceHint": "Canon support and driver downloads",
+        "manualReferenceUrl": "https://www.canon-europe.com/supportproduct/tabcontent/?productTcmUri=tcm:13-1019644&type=drivers&language=en&os=all",
+        "manualReason": "Printer utility and driver packages are model-specific and should be sourced from the vendor",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -327,7 +362,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:01.4181348+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:01.4181348+00:00",
+        "manualAcquisitionType": "vendor-support",
+        "manualSourceHint": "Canon support and driver downloads",
+        "manualReferenceUrl": "https://www.canon-europe.com/supportproduct/tabcontent/?productTcmUri=tcm:13-1019644&type=drivers&language=en&os=all",
+        "manualReason": "Printer utility and driver packages are model-specific and should be sourced from the vendor",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -382,7 +422,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:02.4416095+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:02.4416095+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -422,7 +467,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:03.2036223+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:03.2036223+00:00",
+        "manualAcquisitionType": "vendor-site",
+        "manualSourceHint": "Official Final Draft downloads and installer guides",
+        "manualReferenceUrl": "https://www.finaldraft.com/download/",
+        "manualReason": "Commercial software typically distributed through vendor-managed downloads",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -462,7 +512,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:05.5650616+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:05.5650616+00:00",
+        "manualAcquisitionType": "vendor-site",
+        "manualSourceHint": "Official FORScan downloads",
+        "manualReferenceUrl": "https://forscan.org/download.html",
+        "manualReason": "Niche automotive tool with no current winget package found",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -538,7 +593,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:18.8196777+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:18.8196777+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -586,7 +646,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:07.2709982+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:07.2709982+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -634,7 +699,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:40:50.7139078+00:00"
+        "wingetCheckedAt": "2026-03-09T05:40:50.7139078+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -674,7 +744,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:10.6351374+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:10.6351374+00:00",
+        "manualAcquisitionType": "microsoft-dev-component",
+        "manualSourceHint": "Official Microsoft IIS Express download or Visual Studio installer",
+        "manualReferenceUrl": "https://www.microsoft.com/en-us/download/details.aspx?id=48264",
+        "manualReason": "Microsoft developer component not currently available through winget in this environment",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -714,7 +789,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:13.0117896+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:13.0117896+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -754,7 +834,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:14.5937831+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:14.5937831+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -794,7 +879,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -834,7 +924,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -882,7 +977,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:15.3483203+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:15.3483203+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -922,7 +1022,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:16.2768464+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:16.2768464+00:00",
+        "manualAcquisitionType": "vendor-web",
+        "manualSourceHint": "Meta Messenger web or Meta support page",
+        "manualReferenceUrl": "https://www.meta.com/en-gb/messenger/",
+        "manualReason": "No safe desktop package source was confirmed; current acquisition may be web-first",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -962,7 +1067,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1002,7 +1112,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1042,7 +1157,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:18.3712271+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:18.3712271+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1082,7 +1202,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:20.0784507+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:20.0784507+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1122,7 +1247,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:22.8247887+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:22.8247887+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1162,7 +1292,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:28.9519181+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:28.9519181+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1202,7 +1337,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:30.4671631+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:30.4671631+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1242,7 +1382,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:32.314233+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:32.314233+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1282,7 +1427,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:34.8286626+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:34.8286626+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1322,7 +1472,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1362,7 +1517,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:36.9918758+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:36.9918758+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1403,7 +1563,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1444,7 +1609,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1484,7 +1654,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1532,7 +1707,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:30:05.0962673+00:00"
+        "wingetCheckedAt": "2026-03-09T05:30:05.0962673+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1572,7 +1752,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1612,7 +1797,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1660,7 +1850,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:40.6993759+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:40.6993759+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1700,7 +1895,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1740,7 +1940,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:14:41.8341683+00:00"
+        "wingetCheckedAt": "2026-03-09T05:14:41.8341683+00:00",
+        "manualAcquisitionType": "sql-server-installer",
+        "manualSourceHint": "Official SQL Server Express download with LocalDB included",
+        "manualReferenceUrl": "https://www.microsoft.com/en-us/download/details.aspx?id=101064",
+        "manualReason": "LocalDB is typically distributed as part of SQL Server tooling rather than a separate winget package",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -1788,7 +1993,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:05.9084369+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:05.9084369+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1828,7 +2038,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1868,7 +2083,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1908,7 +2128,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1948,7 +2173,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -1988,7 +2218,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2028,7 +2263,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2068,7 +2308,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2108,7 +2353,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2148,7 +2398,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2188,7 +2443,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2228,7 +2488,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2268,7 +2533,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2308,7 +2578,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2348,7 +2623,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2388,7 +2668,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2428,7 +2713,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2468,7 +2758,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2508,7 +2803,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2548,7 +2848,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2588,7 +2893,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2628,7 +2938,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2668,7 +2983,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2708,7 +3028,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2748,7 +3073,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2788,7 +3118,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2828,7 +3163,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:07.0926689+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:07.0926689+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2876,7 +3216,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:30:05.0962673+00:00"
+        "wingetCheckedAt": "2026-03-09T05:30:05.0962673+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2916,7 +3261,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2956,7 +3306,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -2996,7 +3351,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3036,7 +3396,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:09.8898679+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:09.8898679+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3076,7 +3441,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:11.1014022+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:11.1014022+00:00",
+        "manualAcquisitionType": "vendor-site",
+        "manualSourceHint": "OCTech or ScanTool vendor downloads",
+        "manualReferenceUrl": null,
+        "manualReason": "Vendor-specific automotive application with no package feed match",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -3116,7 +3486,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3156,7 +3531,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3204,7 +3584,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:30:05.0962673+00:00"
+        "wingetCheckedAt": "2026-03-09T05:30:05.0962673+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3244,7 +3629,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3284,7 +3674,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3324,7 +3719,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:13.2945675+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:13.2945675+00:00",
+        "manualAcquisitionType": "vendor-portal",
+        "manualSourceHint": "Ford service or dealer tooling portal",
+        "manualReferenceUrl": null,
+        "manualReason": "Specialized vendor support tool outside normal public package feeds",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -3372,7 +3772,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:14.7534435+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:14.7534435+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3412,7 +3817,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:16.4646947+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:16.4646947+00:00",
+        "manualAcquisitionType": "oem-driver-site",
+        "manualSourceHint": "Device OEM support page first, then Realtek driver listings if needed",
+        "manualReferenceUrl": "https://www.realtek.com/Download/List?cate_id=590&menu_id=405",
+        "manualReason": "Hardware driver package should come from the OEM or chipset vendor",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -3452,7 +3862,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3492,7 +3907,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3532,7 +3952,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3572,7 +3997,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3612,7 +4042,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3652,7 +4087,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3692,7 +4132,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3732,7 +4177,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3772,7 +4222,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3812,7 +4267,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3852,7 +4312,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:17.2471376+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:17.2471376+00:00",
+        "manualAcquisitionType": "vendor-support",
+        "manualSourceHint": "Webasto service or support downloads",
+        "manualReferenceUrl": "https://www.techwebasto.com/updates/tech-news/51-thermo-test-software-overview-v3-8.html",
+        "manualReason": "Specialized OEM tooling with no safe package match found",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -3892,7 +4357,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:18.0048981+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:18.0048981+00:00",
+        "manualAcquisitionType": "vendor-support",
+        "manualSourceHint": "Webasto service or support downloads",
+        "manualReferenceUrl": "https://www.techwebasto.com/updates/tech-news/51-thermo-test-software-overview-v3-8.html",
+        "manualReason": "Specialized OEM tooling with no safe package match found",
+        "manualUpdatedAt": "2026-03-09T06:09:59.7339645+00:00"
       },
       "notes": null,
       "classification": {
@@ -3932,7 +4402,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -3972,7 +4447,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4012,7 +4492,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4052,7 +4537,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4092,7 +4582,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4132,7 +4627,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4172,7 +4672,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4212,7 +4717,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4252,7 +4762,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4292,7 +4807,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4340,7 +4860,12 @@
         ],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": "2026-03-09T05:27:19.7549482+00:00"
+        "wingetCheckedAt": "2026-03-09T05:27:19.7549482+00:00",
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4380,7 +4905,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4420,7 +4950,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4460,7 +4995,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4500,7 +5040,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4540,7 +5085,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4580,7 +5130,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4620,7 +5175,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4660,7 +5220,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4700,7 +5265,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4740,7 +5310,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4780,7 +5355,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4820,7 +5400,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4860,7 +5445,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4900,7 +5490,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4940,7 +5535,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -4980,7 +5580,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5020,7 +5625,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5060,7 +5670,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5100,7 +5715,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5140,7 +5760,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5180,7 +5805,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5220,7 +5850,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5260,7 +5895,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5300,7 +5940,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5340,7 +5985,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5380,7 +6030,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5420,7 +6075,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5460,7 +6120,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5500,7 +6165,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5540,7 +6210,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5580,7 +6255,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5620,7 +6300,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5660,7 +6345,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5700,7 +6390,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5740,7 +6435,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5780,7 +6480,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5820,7 +6525,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5860,7 +6570,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5900,7 +6615,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5940,7 +6660,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -5980,7 +6705,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -6020,7 +6750,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {
@@ -6060,7 +6795,12 @@
         "wingetCandidates": [],
         "installArgs": null,
         "preferredSource": null,
-        "wingetCheckedAt": null
+        "wingetCheckedAt": null,
+        "manualAcquisitionType": null,
+        "manualSourceHint": null,
+        "manualReferenceUrl": null,
+        "manualReason": null,
+        "manualUpdatedAt": null
       },
       "notes": null,
       "classification": {

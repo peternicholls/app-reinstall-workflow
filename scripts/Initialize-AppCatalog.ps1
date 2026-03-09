@@ -75,6 +75,11 @@ $apps = foreach ($group in ($rows | Group-Object { '{0}|{1}' -f (Normalize-AppTe
             downloadedPath = $null
             installArgs = $null
             preferredSource = $null
+            manualAcquisitionType = $null
+            manualSourceHint = $null
+            manualReferenceUrl = $null
+            manualReason = $null
+            manualUpdatedAt = $null
             ready = $false
         }
         notes = $null

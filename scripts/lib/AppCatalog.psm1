@@ -328,7 +328,7 @@ function Initialize-AppEntry {
         }
     }
 
-    foreach ($propertyName in 'installArgs', 'preferredSource') {
+    foreach ($propertyName in 'installArgs', 'preferredSource', 'manualAcquisitionType', 'manualSourceHint', 'manualReferenceUrl', 'manualReason', 'manualUpdatedAt') {
         if (-not (Test-HasProperty -InputObject $App.installer -PropertyName $propertyName)) {
             $App.installer | Add-Member -NotePropertyName $propertyName -NotePropertyValue $null
         }
