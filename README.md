@@ -36,7 +36,7 @@ The scripts in this repository help you:
 Run commands from the repository root:
 
 ```powershell
-pwsh -File .\scripts\Sync-AppCatalog.ps1 -View Summary
+pwsh -File .\scripts\AppReinstall.ps1 -Action Doctor
 ```
 
 ## Repository Layout
@@ -52,6 +52,90 @@ pwsh -File .\scripts\Sync-AppCatalog.ps1 -View Summary
 `output/` is ignored by Git except for a placeholder, and `catalog/apps.json` is also ignored, so generated reports and local catalog state do not need to be committed.
 
 ## Quick Start
+
+The recommended path now uses a single workflow wrapper instead of requiring the script-by-script sequence.
+
+### 1. On the source machine, capture the installed-program inventory
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Capture
+```
+
+This writes `installed-programs.csv` in the repository root.
+
+If you want a timestamped backup pack instead, including the app inventory and reference exports:
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Capture -CaptureMode BackupPack
+```
+
+### 2. Run the preflight checks
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Doctor
+```
+
+This validates the Windows host, PowerShell runtime, `winget`, and the expected working files. A machine-readable report is written to `output/preflight-report.json`.
+
+### 3. Prepare the reinstall workspace
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Prepare
+```
+
+This runs the current recommended preparation pipeline:
+
+- initialize the catalog if it does not exist yet
+- sync the catalog against the current machine
+- classify apps and apply ignore recommendations
+- resolve `winget` package IDs and latest versions
+- search common folders for installers
+- stage installers into `staged-installers/`
+- build `output/install-queue.json`
+- refresh `output/manual-source-queue.json`
+
+To skip `winget` downloads during staging:
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Prepare -SkipWingetDownload
+```
+
+To add manual-reference downloads when a trusted manual URL is already recorded in the catalog:
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Prepare -DownloadFromManualReferences
+```
+
+### 4. Build and review the install plan
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Plan
+```
+
+This writes the current plan to `output/install-plan.json` without executing anything.
+
+### 5. Execute when ready
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Execute
+```
+
+To review a checklist first and deselect apps you do not want to process:
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Execute -InteractiveChecklist
+```
+
+Checklist controls:
+
+- Up/Down arrows: move cursor
+- Space: tick/untick highlighted app
+- `A`: select all
+- `N`: select none
+- `D` or Enter: done
+- `C` or Esc: cancel
+
+## Detailed Script Workflow
 
 ### 1. On the existing machine, create a backup pack
 
@@ -134,10 +218,26 @@ Review the generated plan before any execution step.
 pwsh -File .\scripts\Install-PreparedApps.ps1 -Mode Execute
 ```
 
+To review a checklist first and deselect apps you do not want to process:
+
+```powershell
+pwsh -File .\scripts\Install-PreparedApps.ps1 -Mode Execute -InteractiveChecklist
+```
+
+Checklist controls:
+
+- Up/Down arrows: move cursor
+- Space: tick/untick highlighted app
+- `A`: select all
+- `N`: select none
+- `D` or Enter: done
+- `C` or Esc: cancel
+
 ## Script Reference
 
 | Script | Purpose |
 | --- | --- |
+| `AppReinstall.ps1` | Guided workflow wrapper that exposes the default `Doctor`, `Capture`, `Prepare`, `Plan`, and `Execute` actions |
 | `backup-app-list.ps1` | Creates a timestamped backup pack from an existing machine, including the import-ready `installed-programs.csv` used by this repo |
 | `backup-app-settings.ps1` | Copies a small set of app settings folders and color profiles into a timestamped backup folder |
 | `Get-InstalledPrograms.ps1` | Reads installed-program data from the local machine and outputs table, JSON, or CSV |
@@ -176,6 +276,7 @@ The scripts can generate artifacts such as:
 - `output/classification-report.json`
 - `output/manual-source-queue.json`
 - `output/install-queue.json`
+- `output/install-plan.json`
 - `output/install-log.json`
 - `staged-installers/`
 
