@@ -21,7 +21,7 @@ pwsh -File .\scripts\AppReinstall.ps1 -Action Execute -InteractiveChecklist
 #>
 [CmdletBinding()]
 param(
-    [ValidateSet('Help', 'Doctor', 'Capture', 'Initialize', 'Status', 'Prepare', 'Plan', 'Execute')]
+    [ValidateSet('Help', 'Doctor', 'Validate', 'Capture', 'Initialize', 'Status', 'Prepare', 'Plan', 'Execute')]
     [string]$Action = 'Help',
 
     [string]$CsvPath,
@@ -37,6 +37,8 @@ param(
     [string]$LogPath,
 
     [string]$DoctorReportPath,
+
+    [string]$ValidationReportPath,
 
     [ValidateSet('Inventory', 'BackupPack')]
     [string]$CaptureMode = 'Inventory',
@@ -254,16 +256,18 @@ function Test-WorkflowPrerequisites {
     )
 
     $checks = New-Object 'System.Collections.Generic.List[object]'
+    $catalogValidation = Test-AppCatalogStructure -CatalogPath $ResolvedCatalogPath
+    $queueValidation = Test-InstallQueueStructure -QueuePath $ResolvedQueuePath
     $catalogExists = Test-Path -LiteralPath $ResolvedCatalogPath
-    $catalogValid = $false
-    $catalogSummary = $null
+    $catalogValid = $catalogValidation.isValid
+    $catalogSummary = $catalogValidation.summary
     $csvExists = Test-Path -LiteralPath $ResolvedCsvPath
     $queueExists = Test-Path -LiteralPath $ResolvedQueuePath
-    $queueValid = $false
-    $queueItemCount = 0
-    $readyQueueItemCount = 0
-    $missingStagedFileCount = 0
-    $unreadyQueueItemCount = 0
+    $queueValid = $queueValidation.isValid
+    $queueItemCount = [int]$queueValidation.summary.itemCount
+    $readyQueueItemCount = [int]$queueValidation.summary.readyItemCount
+    $missingStagedFileCount = @($queueValidation.issues | Where-Object { $_.path -like '*.stagedPath' -and $_.severity -eq 'warning' }).Count
+    $unreadyQueueItemCount = ($queueItemCount - $readyQueueItemCount)
     $stageDirectoryExists = Test-Path -LiteralPath $ResolvedStageDirectory
     $planPathWriteAccess = Test-PathWriteAccess -Path $ResolvedPlanPath
     $executionLogWriteAccess = Test-PathWriteAccess -Path $ResolvedExecutionLogPath
@@ -316,17 +320,14 @@ function Test-WorkflowPrerequisites {
     }
 
     if ($catalogExists) {
-        try {
-            $catalog = Read-AppCatalog -CatalogPath $ResolvedCatalogPath
-            $catalogSummary = [PSCustomObject]@{
-                schemaVersion = $catalog.schemaVersion
-                appCount = @($catalog.apps).Count
-            }
-            $catalogValid = $true
-            $checks.Add((New-DoctorCheck -Name 'Catalog file' -Status 'pass' -Details ("schemaVersion={0}; apps={1}" -f [string]$catalog.schemaVersion, @($catalog.apps).Count)))
+        if (-not $catalogValidation.isValid) {
+            $checks.Add((New-DoctorCheck -Name 'Catalog file' -Status 'fail' -Details ("errors={0}; warnings={1}; path={2}" -f $catalogValidation.errorCount, $catalogValidation.warningCount, $ResolvedCatalogPath)))
         }
-        catch {
-            $checks.Add((New-DoctorCheck -Name 'Catalog file' -Status 'fail' -Details $_.Exception.Message))
+        elseif ($catalogValidation.warningCount -gt 0) {
+            $checks.Add((New-DoctorCheck -Name 'Catalog file' -Status 'warning' -Details ("warnings={0}; schemaVersion={1}; apps={2}" -f $catalogValidation.warningCount, [string]$catalogSummary.schemaVersion, [int]$catalogSummary.appCount)))
+        }
+        else {
+            $checks.Add((New-DoctorCheck -Name 'Catalog file' -Status 'pass' -Details ("schemaVersion={0}; apps={1}" -f [string]$catalogSummary.schemaVersion, [int]$catalogSummary.appCount)))
         }
     }
     else {
@@ -334,31 +335,21 @@ function Test-WorkflowPrerequisites {
     }
 
     if ($queueExists) {
-        try {
-            $queueDocument = Get-Content -LiteralPath $ResolvedQueuePath -Raw | ConvertFrom-Json
-            $queueItems = @($queueDocument.items)
-            $queueItemCount = $queueItems.Count
-            $readyQueueItemCount = @($queueItems | Where-Object { $_.ready }).Count
-            $unreadyQueueItemCount = @($queueItems | Where-Object { -not $_.ready }).Count
-            $missingStagedFileCount = @(
-                $queueItems |
-                    Where-Object {
-                        (-not [string]::IsNullOrWhiteSpace([string]$_.stagedPath)) -and
-                        (-not (Test-Path -LiteralPath ([string]$_.stagedPath)))
-                    }
-            ).Count
-            $queueValid = $true
-            $checks.Add((New-DoctorCheck -Name 'Install queue' -Status 'pass' -Details ("items={0}; ready={1}; unready={2}; path={3}" -f $queueItemCount, $readyQueueItemCount, $unreadyQueueItemCount, $ResolvedQueuePath)))
-
-            if ($missingStagedFileCount -eq 0) {
-                $checks.Add((New-DoctorCheck -Name 'Staged installer paths' -Status 'pass' -Details 'All staged installer paths referenced by the queue exist'))
-            }
-            else {
-                $checks.Add((New-DoctorCheck -Name 'Staged installer paths' -Status 'warning' -Details ("{0} queue items reference missing staged files" -f $missingStagedFileCount)))
-            }
+        if (-not $queueValidation.isValid) {
+            $checks.Add((New-DoctorCheck -Name 'Install queue' -Status 'fail' -Details ("errors={0}; warnings={1}; path={2}" -f $queueValidation.errorCount, $queueValidation.warningCount, $ResolvedQueuePath)))
         }
-        catch {
-            $checks.Add((New-DoctorCheck -Name 'Install queue' -Status 'fail' -Details $_.Exception.Message))
+        elseif ($queueValidation.warningCount -gt 0) {
+            $checks.Add((New-DoctorCheck -Name 'Install queue' -Status 'warning' -Details ("items={0}; ready={1}; warnings={2}; path={3}" -f $queueItemCount, $readyQueueItemCount, $queueValidation.warningCount, $ResolvedQueuePath)))
+        }
+        else {
+            $checks.Add((New-DoctorCheck -Name 'Install queue' -Status 'pass' -Details ("items={0}; ready={1}; unready={2}; path={3}" -f $queueItemCount, $readyQueueItemCount, $unreadyQueueItemCount, $ResolvedQueuePath)))
+        }
+
+        if ($missingStagedFileCount -eq 0) {
+            $checks.Add((New-DoctorCheck -Name 'Staged installer paths' -Status 'pass' -Details 'All staged installer paths referenced by the queue exist'))
+        }
+        else {
+            $checks.Add((New-DoctorCheck -Name 'Staged installer paths' -Status 'warning' -Details ("{0} queue items reference missing staged files" -f $missingStagedFileCount)))
         }
     }
     else {
@@ -423,6 +414,10 @@ function Test-WorkflowPrerequisites {
             unreadyItemCount = $unreadyQueueItemCount
             missingStagedFileCount = $missingStagedFileCount
         }
+        validation = [PSCustomObject]@{
+            catalog = $catalogValidation
+            queue = $queueValidation
+        }
         readiness = [PSCustomObject]@{
             prepare = $prepareReady
             plan = $planReady
@@ -431,10 +426,34 @@ function Test-WorkflowPrerequisites {
     }
 }
 
-function Write-DoctorReport {
+function Get-WorkflowValidationReport {
     param(
         [Parameter(Mandatory)]
-        $DoctorResult,
+        [string]$ResolvedCatalogPath,
+
+        [Parameter(Mandatory)]
+        [string]$ResolvedQueuePath
+    )
+
+    $catalogValidation = Test-AppCatalogStructure -CatalogPath $ResolvedCatalogPath
+    $queueValidation = Test-InstallQueueStructure -QueuePath $ResolvedQueuePath
+
+    return [PSCustomObject]@{
+        generatedAt = (Get-Date).ToString('o')
+        catalog = $catalogValidation
+        queue = $queueValidation
+        summary = [PSCustomObject]@{
+            totalErrors = ($catalogValidation.errorCount + $queueValidation.errorCount)
+            totalWarnings = ($catalogValidation.warningCount + $queueValidation.warningCount)
+            isValid = ($catalogValidation.isValid -and $queueValidation.isValid)
+        }
+    }
+}
+
+function Write-WorkflowReport {
+    param(
+        [Parameter(Mandatory)]
+        $Document,
 
         [Parameter(Mandatory)]
         [string]$ResolvedReportPath
@@ -445,7 +464,7 @@ function Write-DoctorReport {
         New-Item -Path $reportDirectory -ItemType Directory -Force | Out-Null
     }
 
-    $DoctorResult | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $ResolvedReportPath -Encoding UTF8
+    $Document | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $ResolvedReportPath -Encoding UTF8
 }
 
 function Show-WorkflowHelp {
@@ -454,6 +473,7 @@ Windows App Reinstall Workflow
 
 Actions:
   Doctor      Run prerequisite and workspace checks.
+    Validate    Validate catalog and install-queue structure without changing state.
   Capture     Export installed programs to CSV or create a backup pack.
   Initialize  Build catalog/apps.json from installed-programs.csv.
   Status      Refresh and show catalog status counts.
@@ -463,12 +483,14 @@ Actions:
 
 Recommended workflow:
   pwsh -File .\scripts\AppReinstall.ps1 -Action Doctor
+    pwsh -File .\scripts\AppReinstall.ps1 -Action Validate
   pwsh -File .\scripts\AppReinstall.ps1 -Action Prepare
   pwsh -File .\scripts\AppReinstall.ps1 -Action Plan
   pwsh -File .\scripts\AppReinstall.ps1 -Action Execute -InteractiveChecklist
 
 Examples:
   pwsh -File .\scripts\AppReinstall.ps1 -Action Capture
+    pwsh -File .\scripts\AppReinstall.ps1 -Action Validate
   pwsh -File .\scripts\AppReinstall.ps1 -Action Prepare -SearchRoot C:\Installers,$env:USERPROFILE\Downloads
   pwsh -File .\scripts\AppReinstall.ps1 -Action Prepare -SkipWingetDownload
     pwsh -File .\scripts\AppReinstall.ps1 -Action Plan -PlanPath .\output\install-plan.json
@@ -485,6 +507,7 @@ $resolvedStageDirectory = Resolve-WorkflowPath -Path $StageDirectory -DefaultPat
 $resolvedPlanPath = Resolve-WorkflowPath -Path $PlanPath -DefaultPath (Join-Path -Path $projectRoot -ChildPath 'output\install-plan.json')
 $resolvedLogPath = Resolve-WorkflowPath -Path $LogPath -DefaultPath (Join-Path -Path $projectRoot -ChildPath 'output\install-log.json')
 $resolvedDoctorReportPath = Resolve-WorkflowPath -Path $DoctorReportPath -DefaultPath (Join-Path -Path $projectRoot -ChildPath 'output\preflight-report.json')
+$resolvedValidationReportPath = Resolve-WorkflowPath -Path $ValidationReportPath -DefaultPath (Join-Path -Path $projectRoot -ChildPath 'output\validation-report.json')
 $downloadWithWinget = -not $SkipWingetDownload.IsPresent
 
 switch ($Action) {
@@ -494,8 +517,14 @@ switch ($Action) {
 
     'Doctor' {
         $doctor = Test-WorkflowPrerequisites -ResolvedCsvPath $resolvedCsvPath -ResolvedCatalogPath $resolvedCatalogPath -ResolvedQueuePath $resolvedQueuePath -ResolvedStageDirectory $resolvedStageDirectory -ResolvedPlanPath $resolvedPlanPath -ResolvedExecutionLogPath $resolvedLogPath
-        Write-DoctorReport -DoctorResult $doctor -ResolvedReportPath $resolvedDoctorReportPath
+        Write-WorkflowReport -Document $doctor -ResolvedReportPath $resolvedDoctorReportPath
         $doctor
+    }
+
+    'Validate' {
+        $validation = Get-WorkflowValidationReport -ResolvedCatalogPath $resolvedCatalogPath -ResolvedQueuePath $resolvedQueuePath
+        Write-WorkflowReport -Document $validation -ResolvedReportPath $resolvedValidationReportPath
+        $validation
     }
 
     'Capture' {
@@ -572,7 +601,7 @@ switch ($Action) {
 
     'Prepare' {
         $doctor = Test-WorkflowPrerequisites -ResolvedCsvPath $resolvedCsvPath -ResolvedCatalogPath $resolvedCatalogPath -ResolvedQueuePath $resolvedQueuePath -ResolvedStageDirectory $resolvedStageDirectory -ResolvedPlanPath $resolvedPlanPath -ResolvedExecutionLogPath $resolvedLogPath
-        Write-DoctorReport -DoctorResult $doctor -ResolvedReportPath $resolvedDoctorReportPath
+        Write-WorkflowReport -Document $doctor -ResolvedReportPath $resolvedDoctorReportPath
 
         if (-not $doctor.readiness.prepare) {
             throw 'Prepare prerequisites are not satisfied. Run -Action Doctor and review output/preflight-report.json.'
@@ -701,7 +730,7 @@ switch ($Action) {
 
     'Plan' {
         $doctor = Test-WorkflowPrerequisites -ResolvedCsvPath $resolvedCsvPath -ResolvedCatalogPath $resolvedCatalogPath -ResolvedQueuePath $resolvedQueuePath -ResolvedStageDirectory $resolvedStageDirectory -ResolvedPlanPath $resolvedPlanPath -ResolvedExecutionLogPath $resolvedLogPath
-        Write-DoctorReport -DoctorResult $doctor -ResolvedReportPath $resolvedDoctorReportPath
+        Write-WorkflowReport -Document $doctor -ResolvedReportPath $resolvedDoctorReportPath
 
         if (-not $doctor.readiness.plan) {
             throw 'Plan prerequisites are not satisfied. Run -Action Doctor and review output/preflight-report.json.'
@@ -735,7 +764,7 @@ switch ($Action) {
 
     'Execute' {
         $doctor = Test-WorkflowPrerequisites -ResolvedCsvPath $resolvedCsvPath -ResolvedCatalogPath $resolvedCatalogPath -ResolvedQueuePath $resolvedQueuePath -ResolvedStageDirectory $resolvedStageDirectory -ResolvedPlanPath $resolvedPlanPath -ResolvedExecutionLogPath $resolvedLogPath
-        Write-DoctorReport -DoctorResult $doctor -ResolvedReportPath $resolvedDoctorReportPath
+        Write-WorkflowReport -Document $doctor -ResolvedReportPath $resolvedDoctorReportPath
 
         if (-not $doctor.readiness.execute) {
             throw 'Execute prerequisites are not satisfied. Run -Action Doctor and review output/preflight-report.json.'

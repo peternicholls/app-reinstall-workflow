@@ -77,6 +77,14 @@ pwsh -File .\scripts\AppReinstall.ps1 -Action Doctor
 
 This validates the Windows host, PowerShell runtime, `winget`, and the expected working files. A machine-readable report is written to `output/preflight-report.json`.
 
+To validate the current catalog and install queue structure without changing state:
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Validate
+```
+
+This writes `output/validation-report.json`.
+
 ### 3. Prepare the reinstall workspace
 
 ```powershell
@@ -278,6 +286,7 @@ The scripts can generate artifacts such as:
 - `output/install-queue.json`
 - `output/install-plan.json`
 - `output/install-log.json`
+- `output/validation-report.json`
 - `staged-installers/`
 
 These files are intended as working data, not long-term source files.

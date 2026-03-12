@@ -262,6 +262,192 @@ function Save-AppCatalog {
     return $resolvedPath
 }
 
+function New-ValidationIssue {
+    param(
+        [Parameter(Mandatory)]
+        [ValidateSet('error', 'warning')]
+        [string]$Severity,
+
+        [Parameter(Mandatory)]
+        [string]$Path,
+
+        [Parameter(Mandatory)]
+        [string]$Message
+    )
+
+    return [PSCustomObject]@{
+        severity = $Severity
+        path = $Path
+        message = $Message
+    }
+}
+
+function Test-AppCatalogStructure {
+    param(
+        [Parameter(Mandatory)]
+        [string]$CatalogPath
+    )
+
+    $resolvedPath = Resolve-AppPath -Path $CatalogPath
+    $issues = New-Object 'System.Collections.Generic.List[object]'
+    $catalog = $null
+    $schemaVersion = $null
+    $apps = @()
+
+    if (-not (Test-Path -LiteralPath $resolvedPath)) {
+        $issues.Add((New-ValidationIssue -Severity 'error' -Path 'catalog' -Message "Catalog file not found: $resolvedPath"))
+    }
+    else {
+        try {
+            $catalog = Get-Content -LiteralPath $resolvedPath -Raw | ConvertFrom-Json
+        }
+        catch {
+            $issues.Add((New-ValidationIssue -Severity 'error' -Path 'catalog' -Message $_.Exception.Message))
+        }
+    }
+
+    if ($null -ne $catalog) {
+        if (Test-HasProperty -InputObject $catalog -PropertyName 'schemaVersion') {
+            $schemaVersion = $catalog.schemaVersion
+            if ([string]$schemaVersion -ne '1') {
+                $issues.Add((New-ValidationIssue -Severity 'warning' -Path 'schemaVersion' -Message ("Unsupported schemaVersion value: {0}" -f [string]$schemaVersion)))
+            }
+        }
+        else {
+            $issues.Add((New-ValidationIssue -Severity 'error' -Path 'schemaVersion' -Message 'Catalog is missing schemaVersion'))
+        }
+
+        if (-not (Test-HasProperty -InputObject $catalog -PropertyName 'apps') -or $null -eq $catalog.apps) {
+            $issues.Add((New-ValidationIssue -Severity 'error' -Path 'apps' -Message 'Catalog is missing apps'))
+        }
+        else {
+            $apps = @($catalog.apps)
+        }
+
+        $allowedStatuses = @('unknown', 'installed', 'missing', 'ignored')
+        for ($index = 0; $index -lt $apps.Count; $index++) {
+            $app = $apps[$index]
+            $appPath = "apps[$index]"
+
+            if ([string]::IsNullOrWhiteSpace([string](Get-OptionalPropertyValue -InputObject $app -PropertyName 'name'))) {
+                $issues.Add((New-ValidationIssue -Severity 'error' -Path "$appPath.name" -Message 'App entry is missing name'))
+            }
+
+            if (-not (Test-HasProperty -InputObject $app -PropertyName 'desired') -or -not ($app.desired -is [bool])) {
+                $issues.Add((New-ValidationIssue -Severity 'error' -Path "$appPath.desired" -Message 'App entry is missing a boolean desired flag'))
+            }
+
+            if (-not (Test-HasProperty -InputObject $app -PropertyName 'status') -or [string]::IsNullOrWhiteSpace([string]$app.status)) {
+                $issues.Add((New-ValidationIssue -Severity 'error' -Path "$appPath.status" -Message 'App entry is missing status'))
+            }
+            elseif ([string]$app.status -notin $allowedStatuses) {
+                $issues.Add((New-ValidationIssue -Severity 'warning' -Path "$appPath.status" -Message ("Unexpected status value: {0}" -f [string]$app.status)))
+            }
+
+            foreach ($propertyName in 'detection', 'latest', 'classification', 'installer') {
+                if (-not (Test-HasProperty -InputObject $app -PropertyName $propertyName) -or $null -eq $app.$propertyName) {
+                    $issues.Add((New-ValidationIssue -Severity 'error' -Path ("{0}.{1}" -f $appPath, $propertyName) -Message ("App entry is missing {0}" -f $propertyName)))
+                }
+            }
+        }
+    }
+
+    $errorCount = @($issues | Where-Object { $_.severity -eq 'error' }).Count
+    $warningCount = @($issues | Where-Object { $_.severity -eq 'warning' }).Count
+
+    return [PSCustomObject]@{
+        type = 'catalog'
+        path = $resolvedPath
+        isValid = ($errorCount -eq 0)
+        issueCount = $issues.Count
+        errorCount = $errorCount
+        warningCount = $warningCount
+        issues = @($issues)
+        summary = [PSCustomObject]@{
+            schemaVersion = $schemaVersion
+            appCount = $apps.Count
+        }
+    }
+}
+
+function Test-InstallQueueStructure {
+    param(
+        [Parameter(Mandatory)]
+        [string]$QueuePath
+    )
+
+    $resolvedPath = Resolve-AppPath -Path $QueuePath
+    $issues = New-Object 'System.Collections.Generic.List[object]'
+    $queueDocument = $null
+    $items = @()
+
+    if (-not (Test-Path -LiteralPath $resolvedPath)) {
+        $issues.Add((New-ValidationIssue -Severity 'error' -Path 'queue' -Message "Install queue file not found: $resolvedPath"))
+    }
+    else {
+        try {
+            $queueDocument = Get-Content -LiteralPath $resolvedPath -Raw | ConvertFrom-Json
+        }
+        catch {
+            $issues.Add((New-ValidationIssue -Severity 'error' -Path 'queue' -Message $_.Exception.Message))
+        }
+    }
+
+    if ($null -ne $queueDocument) {
+        if (-not (Test-HasProperty -InputObject $queueDocument -PropertyName 'items') -or $null -eq $queueDocument.items) {
+            $issues.Add((New-ValidationIssue -Severity 'error' -Path 'items' -Message 'Install queue is missing items'))
+        }
+        else {
+            $items = @($queueDocument.items)
+        }
+
+        for ($index = 0; $index -lt $items.Count; $index++) {
+            $item = $items[$index]
+            $itemPath = "items[$index]"
+
+            if ([string]::IsNullOrWhiteSpace([string](Get-OptionalPropertyValue -InputObject $item -PropertyName 'name'))) {
+                $issues.Add((New-ValidationIssue -Severity 'error' -Path "$itemPath.name" -Message 'Queue item is missing name'))
+            }
+
+            if ([string]::IsNullOrWhiteSpace([string](Get-OptionalPropertyValue -InputObject $item -PropertyName 'source'))) {
+                $issues.Add((New-ValidationIssue -Severity 'error' -Path "$itemPath.source" -Message 'Queue item is missing source'))
+            }
+
+            if (-not (Test-HasProperty -InputObject $item -PropertyName 'ready') -or -not ($item.ready -is [bool])) {
+                $issues.Add((New-ValidationIssue -Severity 'error' -Path "$itemPath.ready" -Message 'Queue item is missing a boolean ready flag'))
+            }
+
+            if (-not (Test-HasProperty -InputObject $item -PropertyName 'stagedPath')) {
+                $issues.Add((New-ValidationIssue -Severity 'error' -Path "$itemPath.stagedPath" -Message 'Queue item is missing stagedPath'))
+            }
+            elseif ($item.ready -is [bool] -and $item.ready -and [string]$item.source -ne 'winget' -and [string]::IsNullOrWhiteSpace([string]$item.stagedPath)) {
+                $issues.Add((New-ValidationIssue -Severity 'error' -Path "$itemPath.stagedPath" -Message 'Ready queue item is missing stagedPath'))
+            }
+            elseif (-not [string]::IsNullOrWhiteSpace([string]$item.stagedPath) -and -not (Test-Path -LiteralPath ([string]$item.stagedPath))) {
+                $issues.Add((New-ValidationIssue -Severity 'warning' -Path "$itemPath.stagedPath" -Message ("Referenced staged installer does not exist: {0}" -f [string]$item.stagedPath)))
+            }
+        }
+    }
+
+    $readyItemCount = @($items | Where-Object { $_.ready -is [bool] -and $_.ready }).Count
+    $errorCount = @($issues | Where-Object { $_.severity -eq 'error' }).Count
+    $warningCount = @($issues | Where-Object { $_.severity -eq 'warning' }).Count
+
+    return [PSCustomObject]@{
+        type = 'install-queue'
+        path = $resolvedPath
+        isValid = ($errorCount -eq 0)
+        issueCount = $issues.Count
+        errorCount = $errorCount
+        warningCount = $warningCount
+        issues = @($issues)
+        summary = [PSCustomObject]@{
+            itemCount = $items.Count
+            readyItemCount = $readyItemCount
+        }
+    }
+}
+
 function Initialize-AppEntry {
     param(
         [Parameter(Mandatory)]
@@ -434,7 +620,7 @@ function Find-InstalledProgramMatch {
     $normalizedPublisher = Normalize-AppText -Value ([string]$App.publisher)
     $expectedVersion = Convert-EmptyToNull -Value ([string]$App.expectedVersion)
 
-    $matches = @(
+    $programMatches = @(
         foreach ($program in $InstalledPrograms) {
         $programName = Normalize-AppText -Value ([string]$program.DisplayName)
         $programCoreName = Get-VersionlessAppText -Value ([string]$program.DisplayName)
@@ -489,12 +675,12 @@ function Find-InstalledProgramMatch {
         }
     )
 
-    if ($matches.Count -eq 0) {
+    if ($programMatches.Count -eq 0) {
         return $null
     }
 
     return @(
-        $matches |
+        $programMatches |
             Sort-Object -Property Score -Descending
     )[0].Program
 }
@@ -953,12 +1139,12 @@ function Get-AttributeDownloadCandidates {
 
     $referenceUri = [Uri]$PageUrl
     $decodedContent = [System.Net.WebUtility]::HtmlDecode($RawContent)
-    $matches = [regex]::Matches($decodedContent, '(?is)<[^>]*data-download-url\s*=\s*["''](?<url>[^"'']+)["''][^>]*>')
-    if ($matches.Count -eq 0) {
+    $downloadUrlMatches = [regex]::Matches($decodedContent, '(?is)<[^>]*data-download-url\s*=\s*["''](?<url>[^"'']+)["''][^>]*>')
+    if ($downloadUrlMatches.Count -eq 0) {
         return @()
     }
 
-    $candidates = foreach ($match in $matches) {
+    $candidates = foreach ($match in $downloadUrlMatches) {
         $rawUrl = [string]$match.Groups['url'].Value
         if ([string]::IsNullOrWhiteSpace($rawUrl)) {
             continue
@@ -1679,6 +1865,8 @@ Export-ModuleMember -Function @(
     'Read-AppCatalog',
     'Resolve-AppPath',
     'Save-AppCatalog',
+    'Test-AppCatalogStructure',
+    'Test-InstallQueueStructure',
     'Stage-ManualReferenceInstaller',
     'Test-HasProperty',
     'Update-AppCatalogStatuses'
