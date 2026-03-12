@@ -9,3 +9,4 @@ staged-installers/*
 # Ignore the working app catalog, but keep the catalog directory
 catalog/apps.json
 !catalog/.gitkeep
+
