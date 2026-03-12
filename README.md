@@ -11,6 +11,8 @@ It is intended for scenarios such as:
 
 The workflow centers on `catalog/apps.json`, a machine-readable catalog that keeps installation state, package candidates, local installer matches, classification data, and manual follow-up notes in one place. That working file is intentionally ignored by Git so local catalog state does not end up in the public repository.
 
+The repository also includes a small Pester test suite for catalog validation and install-plan generation behavior.
+
 ## What The Repository Does
 
 The scripts in this repository help you:
@@ -32,6 +34,7 @@ The scripts in this repository help you:
 - Windows
 - PowerShell 7 or Windows PowerShell with script execution enabled for local scripts
 - `winget` for package lookup, version refresh, and optional download/install flows
+- Pester 5 or newer to run the test suite as written
 
 Run commands from the repository root:
 
@@ -46,8 +49,10 @@ pwsh -File .\scripts\AppReinstall.ps1 -Action Doctor
 | `scripts/` | Entry-point scripts for inventory, catalog maintenance, staging, and installation |
 | `scripts/lib/AppCatalog.psm1` | Shared helper functions used by all scripts |
 | `catalog/` | Local working catalog directory; `apps.json` is ignored by Git |
+| `docs/` | Supporting project notes and evaluation documents |
 | `installed-programs.csv` | Generic sample source snapshot; replace this with a real export before use |
 | `output/` | Generated reports, queues, logs, and staged installers |
+| `tests/` | Pester tests covering catalog validation and install-plan behavior |
 
 `output/` is ignored by Git except for a placeholder, and `catalog/apps.json` is also ignored, so generated reports and local catalog state do not need to be committed.
 
@@ -67,6 +72,12 @@ If you want a timestamped backup pack instead, including the app inventory and r
 
 ```powershell
 pwsh -File .\scripts\AppReinstall.ps1 -Action Capture -CaptureMode BackupPack
+```
+
+To include the small settings-backup allowlist in the same capture run:
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Capture -CaptureMode BackupPack -IncludeSettingsBackup
 ```
 
 ### 2. Run the preflight checks
@@ -102,6 +113,8 @@ This runs the current recommended preparation pipeline:
 - build `output/install-queue.json`
 - refresh `output/manual-source-queue.json`
 
+Additional reports are also written during prepare, including `output/sync-report.json`, `output/classification-report.json`, `output/winget-report.json`, `output/latest-version-report.json`, and `output/installer-report.json`.
+
 To skip `winget` downloads during staging:
 
 ```powershell
@@ -114,6 +127,12 @@ To add manual-reference downloads when a trusted manual URL is already recorded 
 pwsh -File .\scripts\AppReinstall.ps1 -Action Prepare -DownloadFromManualReferences
 ```
 
+To search additional installer folders during discovery:
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Prepare -SearchRoot C:\Installers,$env:USERPROFILE\Downloads
+```
+
 ### 4. Build and review the install plan
 
 ```powershell
@@ -121,6 +140,18 @@ pwsh -File .\scripts\AppReinstall.ps1 -Action Plan
 ```
 
 This writes the current plan to `output/install-plan.json` without executing anything.
+
+To prefer direct `winget install` commands in the plan for apps that already have a `wingetId`:
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Plan -UseWingetWhenAvailable
+```
+
+To allow `.exe` installers without recorded silent arguments:
+
+```powershell
+pwsh -File .\scripts\AppReinstall.ps1 -Action Plan -AllowExeWithoutArgs
+```
 
 ### 5. Execute when ready
 
@@ -134,6 +165,8 @@ To review a checklist first and deselect apps you do not want to process:
 pwsh -File .\scripts\AppReinstall.ps1 -Action Execute -InteractiveChecklist
 ```
 
+`-UseWingetWhenAvailable` and `-AllowExeWithoutArgs` are also available during `-Action Execute`.
+
 Checklist controls:
 
 - Up/Down arrows: move cursor
@@ -142,6 +175,19 @@ Checklist controls:
 - `N`: select none
 - `D` or Enter: done
 - `C` or Esc: cancel
+
+## Wrapper Actions
+
+`AppReinstall.ps1` exposes the full action set below:
+
+- `Doctor` validates the Windows host, PowerShell runtime, `winget`, key paths, and queue/catalog health
+- `Validate` checks the current catalog and install queue JSON structure without changing workflow state
+- `Capture` exports `installed-programs.csv` or builds a timestamped backup pack
+- `Initialize` creates `catalog/apps.json` directly from `installed-programs.csv`
+- `Status` re-syncs the catalog and writes `output/sync-report.json`
+- `Prepare` runs the recommended end-to-end preparation pipeline
+- `Plan` builds `output/install-plan.json`
+- `Execute` runs the prepared queue and writes `output/install-log.json`
 
 ## Detailed Script Workflow
 
@@ -212,6 +258,12 @@ pwsh -File .\scripts\Prepare-AppInstallers.ps1 -DownloadWithWinget
 pwsh -File .\scripts\Get-ManualSourceQueue.ps1 -Format Table -UpdateCatalog
 ```
 
+If the catalog already contains trusted `installer.manualReferenceUrl` values and you want to try downloading them into the stage folder:
+
+```powershell
+pwsh -File .\scripts\Download-ManualReferenceInstallers.ps1
+```
+
 ### 10. Build an install plan
 
 ```powershell
@@ -245,7 +297,7 @@ Checklist controls:
 
 | Script | Purpose |
 | --- | --- |
-| `AppReinstall.ps1` | Guided workflow wrapper that exposes the default `Doctor`, `Capture`, `Prepare`, `Plan`, and `Execute` actions |
+| `AppReinstall.ps1` | Guided workflow wrapper that exposes `Doctor`, `Validate`, `Capture`, `Initialize`, `Status`, `Prepare`, `Plan`, and `Execute` |
 | `backup-app-list.ps1` | Creates a timestamped backup pack from an existing machine, including the import-ready `installed-programs.csv` used by this repo |
 | `backup-app-settings.ps1` | Copies a small set of app settings folders and color profiles into a timestamped backup folder |
 | `Get-InstalledPrograms.ps1` | Reads installed-program data from the local machine and outputs table, JSON, or CSV |
@@ -257,6 +309,7 @@ Checklist controls:
 | `Find-AppInstallers.ps1` | Searches local folders for likely installer files |
 | `Prepare-AppInstallers.ps1` | Copies or downloads installers from local paths and `winget` into `staged-installers/` and writes `output/install-queue.json` |
 | `Get-ManualSourceQueue.ps1` | Produces a queue of unresolved apps that still need vendor, Microsoft, OEM, or archive lookup |
+| `Download-ManualReferenceInstallers.ps1` | Attempts to download installers from cataloged manual reference URLs into `staged-installers/` and writes `output/manual-download-queue.json` |
 | `Set-AppStatus.ps1` | Manually overrides one catalog entry |
 | `Install-PreparedApps.ps1` | Generates an install plan and can run supported installers |
 
@@ -280,9 +333,14 @@ Because `catalog/apps.json` is ignored by Git, this catalog is treated as local 
 
 The scripts can generate artifacts such as:
 
+- `output/preflight-report.json`
+- `output/sync-report.json`
 - `output/winget-report.json`
+- `output/latest-version-report.json`
 - `output/classification-report.json`
+- `output/installer-report.json`
 - `output/manual-source-queue.json`
+- `output/manual-download-queue.json`
 - `output/install-queue.json`
 - `output/install-plan.json`
 - `output/install-log.json`
@@ -290,6 +348,20 @@ The scripts can generate artifacts such as:
 - `staged-installers/`
 
 These files are intended as working data, not long-term source files.
+
+## Tests
+
+The repository includes Pester tests under `tests/`.
+
+Run them from the repository root:
+
+```powershell
+Invoke-Pester .\tests
+```
+
+The checked-in tests use modern `Should -Be` assertions, so use Pester 5 or newer rather than the older Windows PowerShell inbox Pester 3.x module.
+
+Current coverage is targeted rather than comprehensive. The checked-in tests validate catalog structure handling and install-plan behavior for ready MSI items and unsupported EXE silent-install cases.
 
 ## Safety Notes
 
@@ -310,6 +382,10 @@ This workflow operates on machine-derived data. Files such as `installed-program
 The tracked `installed-programs.csv` in this repository is only a generic sample. Replace it with a real export for actual use, and do not commit your machine-specific replacement back to a public repository.
 
 If you use this repository publicly, treat generated files and real inventory exports as environment-specific data and sanitize or exclude them before publishing.
+
+## Additional Docs
+
+- `docs/project-evaluation.md` documents the current project scope, strengths, weaknesses, and verification limits for this checkout
 
 ## License
 
